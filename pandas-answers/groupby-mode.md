@@ -4,19 +4,19 @@ It's a post that was first posted as an answer to the following Stack Overflow q
 ##### GroupBy pandas DataFrame and select most common value
 
 > I have a data frame with three string columns. I know that the only one value in the 3rd column is valid for every combination of the first two. To clean the data I have to group by data frame by first two columns and select most common value of the third column for each combination.
-
+>
 > My code:
-
->    import pandas as pd
->    from scipy import stats
+> ```python
+> import pandas as pd
+> from scipy import stats
 >
->    source = pd.DataFrame({
->        'Country': ['USA', 'USA', 'Russia', 'USA'], 
->        'City': ['New-York', 'New-York', 'Sankt-Petersburg', 'New-York'],
->        'Short name': ['NY', 'New', 'Spb', 'NY']})
+> source = pd.DataFrame({
+>    'Country': ['USA', 'USA', 'Russia', 'USA'], 
+>    'City': ['New-York', 'New-York', 'Sankt-Petersburg', 'New-York'],
+>    'Short name': ['NY', 'New', 'Spb', 'NY']})
 >
->    source.groupby(['Country','City']).agg(lambda x: stats.mode(x['Short name'])[0])
-
+> source.groupby(['Country','City']).agg(lambda x: stats.mode(x['Short name'])[0])
+>
 > Last line of code doesn't work, it says `KeyError: 'Short name'` and if I try to group only by City, then I got an AssertionError. What can I do fix it?
 
 
