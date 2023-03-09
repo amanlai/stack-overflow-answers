@@ -16,6 +16,7 @@ It's a post that was first posted as an answer to the following Stack Overflow q
 >    'Short name': ['NY', 'New', 'Spb', 'NY']})
 >
 > source.groupby(['Country','City']).agg(lambda x: stats.mode(x['Short name'])[0])
+> ```
 >
 > Last line of code doesn't work, it says `KeyError: 'Short name'` and if I try to group only by City, then I got an AssertionError. What can I do fix it?
 
