@@ -3,7 +3,7 @@ It's a post that was first posted as an answer to the following Stack Overflow q
 ## Difference between groupby and pivot_table
 > I just started learning Pandas and was wondering if there is any difference between `groupby` and `pivot_table` functions. Can anyone help me understand the difference between them?
 
-**pivot_table = groupby + unstack** and **groupby = pivot_table + stack** hold True.
+### `pivot_table = groupby + unstack` and `groupby = pivot_table + stack` are True.
 
 In particular, if `columns` parameter of `pivot_table()` is not used, then `groupby()` and `pivot_table()` both produce the same result (if the same aggregator function is used).
 
