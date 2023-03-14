@@ -142,7 +142,7 @@ You can also apply the previous insight to multi-column pivot operation as well.
 
 ---
 
-<sup>
+
 
 
 <sup>1</sup> `pivot_table()` aggregates the values and unstacks it. Specifically, it creates a single flat list out of index and columns, calls `groupby()` with this list as the grouper and aggregates using the passed aggregator methods (the default is `mean`). Then after aggregation, it calls `unstack()` by the list of columns. So internally, **pivot_table = groupby + unstack**. Moreover, if `fill_value` is passed, `fillna()` is called.
