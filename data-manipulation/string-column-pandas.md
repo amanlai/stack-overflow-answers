@@ -1,5 +1,7 @@
 It's a post that was first posted as an answer to the following Stack Overflow question and can be found at https://stackoverflow.com/a/75528571/19123103
 
+## Convert columns to string in Pandas
+
 > I have the following DataFrame from a SQL query:
 > ```none
 > (Pdb) pp total_rows
