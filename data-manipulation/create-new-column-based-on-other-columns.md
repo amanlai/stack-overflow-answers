@@ -1,3 +1,5 @@
+It's a post that was first posted as an answer to the following Stack Overflow question and can be found at https://stackoverflow.com/a/73643899/19123103
+
 ## Create new column based on values from other columns / apply a function of multiple columns, row-wise in Pandas
 
 > I want to apply my custom function (it uses an if-else ladder) to these six columns (`ERI_Hispanic`, `ERI_AmerInd_AKNatv`, `ERI_Asian`, `ERI_Black_Afr.Amer`, `ERI_HI_PacIsl`, `ERI_White`) in each row of my dataframe.
@@ -25,17 +27,17 @@
 > 
 > **DATAFRAME**
 > 
->     	 lname			fname		rno_cd	eri_afr_amer	eri_asian	eri_hawaiian	eri_hispanic	eri_nat_amer	eri_white	> rno_defined
->     0	 MOST	 		JEFF	 	E	    0	 			0	 		0	 			0	>  			0	 			1	 		White
->     1	 CRUISE		 	TOM		 	E	 	0	 			0	 		0	 		> 	1	 			0	 			0	 		White
->     2	 DEPP	 		JOHNNY		 		0	 			0	 		0	 			> 0	 			0	 			1	 		Unknown
->     3	 DICAP	 		LEO			 		0	 			0	 		0	 		> 	0	 			0	 			1	 		Unknown
->     4	 BRANDO		 	MARLON	 	E	 	0	 			0	 		0	 			> 0	 			0	 			0	 		White
->     5	 HANKS		 	TOM		 	0	 					0	 		0	 		> 	0	 			0	 			1	 		Unknown
->     6	 DENIRO	 		ROBERT	 	E	 	0	 			1	 		0	 			> 0	 			0	 			1	 		White
->     7	 PACINO		 	AL			E	 	0	 			0	 		0	 		> 	0	 			0	 			1	 		White
->     8	 WILLIAMS	 	ROBIN		E	 	0	 			0	 		1	 			> 0	 			0	 			0	 		White
->     9	 EASTWOOD	 	CLINT	 	E	 	0	 			0	 		0	 			> 0	 			0	 			1	 		White
+>     	 lname			fname		rno_cd	eri_afr_amer	eri_asian	eri_hawaiian	eri_hispanic	eri_nat_amer	eri_white	rno_defined
+>     0	 MOST	 		JEFF	 	E	    0	 			0	 		0	 			0	 			0	 			1	 		White
+>     1	 CRUISE		 	TOM		 	E	 	0	 			0	 		0	 			1	 			0	 			0	 		White
+>     2	 DEPP	 		JOHNNY		 		0	 			0	 		0	 			0	 			0	 			1	 		Unknown
+>     3	 DICAP	 		LEO			 		0	 			0	 		0	 			0	 			0	 			1	 		Unknown
+>     4	 BRANDO		 	MARLON	 	E	 	0	 			0	 		0	 			0	 			0	 			0	 		White
+>     5	 HANKS		 	TOM		 	0	 					0	 		0	 			0	 			0	 			1	 		Unknown
+>     6	 DENIRO	 		ROBERT	 	E	 	0	 			1	 		0	 			0	 			0	 			1	 		White
+>     7	 PACINO		 	AL			E	 	0	 			0	 		0	 			0	 			0	 			1	 		White
+>     8	 WILLIAMS	 	ROBIN		E	 	0	 			0	 		1	 			0	 			0	 			0	 		White
+>     9	 EASTWOOD	 	CLINT	 	E	 	0	 			0	 		0	 			0	 			0	 			1	 		White
  
 
 
