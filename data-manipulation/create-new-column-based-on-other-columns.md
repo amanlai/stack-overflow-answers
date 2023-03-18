@@ -28,13 +28,13 @@ It's a post that was first posted as an answer to the following Stack Overflow q
 > **DATAFRAME**
 > ```none
 >      lname   fname  rno_cd  eri_afr_amer  eri_asian  eri_hawaiian  eri_hispanic  eri_nat_amer  eri_white  rno_defined
-> 0     MOST    JEFF       E	         0          0             0             0             0          1        White
+> 0     MOST    JEFF       E             0          0             0             0             0          1        White
 > 1   CRUISE     TOM       E             0          0             0             1             0          0        White
 > 2     DEPP  JOHNNY                     0          0             0             0             0          1      Unknown
 > 3    DICAP     LEO                     0          0             0             0             0          1      Unknown
-> 4   BRANDO  MARLON       E	         0          0             0             0             0          0        White
+> 4   BRANDO  MARLON       E             0          0             0             0             0          0        White
 > 5    HANKS     TOM                     0          0             0             0             0          1      Unknown
-> 6   DENIRO  ROBERT       E	         0          1             0             0             0          1        White
+> 6   DENIRO  ROBERT       E             0          1             0             0             0          1        White
 > 7   PACINO      AL       E             0          0             0             0             0          1        White
 > 8 WILLIAMS   ROBIN       E             0          0             1             0             0          0        White
 > 9 EASTWOOD   CLINT       E             0          0             0             0             0          1        White
