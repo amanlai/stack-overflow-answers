@@ -11,34 +11,34 @@ It's a post that was first posted as an answer to the following Stack Overflow q
 > From the dataframe below I need to calculate a new column based on the following spec in SQL:
 > 
 > **CRITERIA**
-> 
->     IF [ERI_Hispanic] = 1 THEN RETURN “Hispanic”
->     ELSE IF SUM([ERI_AmerInd_AKNatv] + [ERI_Asian] + [ERI_Black_Afr.Amer] + [ERI_HI_PacIsl] + [ERI_White]) > 1 THEN RETURN “Two or More”
->     ELSE IF [ERI_AmerInd_AKNatv] = 1 THEN RETURN “A/I AK Native”
->     ELSE IF [ERI_Asian] = 1 THEN RETURN “Asian”
->     ELSE IF [ERI_Black_Afr.Amer] = 1 THEN RETURN “Black/AA”
->     ELSE IF [ERI_HI_PacIsl] = 1 THEN RETURN “Haw/Pac Isl.”
->     ELSE IF [ERI_White] = 1 THEN RETURN “White”
-> 
+> ```none
+> IF [ERI_Hispanic] = 1 THEN RETURN “Hispanic”
+> ELSE IF SUM([ERI_AmerInd_AKNatv] + [ERI_Asian] + [ERI_Black_Afr.Amer] + [ERI_HI_PacIsl] + [ERI_White]) > 1 THEN RETURN “Two or More”
+> ELSE IF [ERI_AmerInd_AKNatv] = 1 THEN RETURN “A/I AK Native”
+> ELSE IF [ERI_Asian] = 1 THEN RETURN “Asian”
+> ELSE IF [ERI_Black_Afr.Amer] = 1 THEN RETURN “Black/AA”
+> ELSE IF [ERI_HI_PacIsl] = 1 THEN RETURN “Haw/Pac Isl.”
+> ELSE IF [ERI_White] = 1 THEN RETURN “White”
+> ```
 > Comment: If the ERI Flag for Hispanic is True (1), the employee is classified as “Hispanic”
 > 
 > Comment: If more than 1 non-Hispanic ERI Flag is true, return “Two or More”
 > 
 > 
 > **DATAFRAME**
-> 
->     	 lname			fname		rno_cd	eri_afr_amer	eri_asian	eri_hawaiian	eri_hispanic	eri_nat_amer	eri_white	rno_defined
->     0	 MOST	 		JEFF	 	E	    0	 			0	 		0	 			0	 			0	 			1	 		White
->     1	 CRUISE		 	TOM		 	E	 	0	 			0	 		0	 			1	 			0	 			0	 		White
->     2	 DEPP	 		JOHNNY		 		0	 			0	 		0	 			0	 			0	 			1	 		Unknown
->     3	 DICAP	 		LEO			 		0	 			0	 		0	 			0	 			0	 			1	 		Unknown
->     4	 BRANDO		 	MARLON	 	E	 	0	 			0	 		0	 			0	 			0	 			0	 		White
->     5	 HANKS		 	TOM		 	0	 					0	 		0	 			0	 			0	 			1	 		Unknown
->     6	 DENIRO	 		ROBERT	 	E	 	0	 			1	 		0	 			0	 			0	 			1	 		White
->     7	 PACINO		 	AL			E	 	0	 			0	 		0	 			0	 			0	 			1	 		White
->     8	 WILLIAMS	 	ROBIN		E	 	0	 			0	 		1	 			0	 			0	 			0	 		White
->     9	 EASTWOOD	 	CLINT	 	E	 	0	 			0	 		0	 			0	 			0	 			1	 		White
- 
+> ```none
+> 	 lname			fname		rno_cd	eri_afr_amer	eri_asian	eri_hawaiian	eri_hispanic	eri_nat_amer	eri_white	rno_defined
+> 0	 MOST	 		JEFF	 	E	    0	 			0	 		0	 			0	 			0	 			1	 		White
+> 1	 CRUISE		 	TOM		 	E	 	0	 			0	 		0	 			1	 			0	 			0	 		White
+> 2	 DEPP	 		JOHNNY		 		0	 			0	 		0	 			0	 			0	 			1	 		Unknown
+> 3	 DICAP	 		LEO			 		0	 			0	 		0	 			0	 			0	 			1	 		Unknown
+> 4	 BRANDO		 	MARLON	 	E	 	0	 			0	 		0	 			0	 			0	 			0	 		White
+> 5	 HANKS		 	TOM		 	0	 					0	 		0	 			0	 			0	 			1	 		Unknown
+> 6	 DENIRO	 		ROBERT	 	E	 	0	 			1	 		0	 			0	 			0	 			1	 		White
+> 7	 PACINO		 	AL			E	 	0	 			0	 		0	 			0	 			0	 			1	 		White
+> 8	 WILLIAMS	 	ROBIN		E	 	0	 			0	 		1	 			0	 			0	 			0	 		White
+> 9	 EASTWOOD	 	CLINT	 	E	 	0	 			0	 		0	 			0	 			0	 			1	 		White
+> ```
 
 
 If we inspect its [source code](https://github.com/pandas-dev/pandas/blob/main/pandas/core/apply.py), `apply()` is a syntactic sugar for a Python for-loop (via the `apply_series_generator()` method of the `FrameApply` class). Because it has the pandas overhead, it's generally *slower* than a Python loop.
