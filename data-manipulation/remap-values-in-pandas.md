@@ -6,10 +6,10 @@ It's a post that was first posted as an answer to the following Stack Overflow q
 > 
 > I would like to apply it to the `col1` column of a dataframe to make the following transformation:
 > ```none
->      col1   col2           col1   col2
-> 0       w      a      0       w      a
-> 1       1      2  ⟶  1       A      2
-> 2       2    NaN      2       B    NaN
+>      col1   col2               col1   col2
+> 0       w      a    ⟶    0       w      a
+> 1       1      2    ⟶    1       A      2
+> 2       2    NaN    ⟶    2       B    NaN
 > ```
 > How can I best do this?
 
