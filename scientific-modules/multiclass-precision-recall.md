@@ -33,6 +33,7 @@ The multilabel confusion matrix for this example looks like the following.
 
 [![confusion matrix][5]][5]
 
+
 The respective precision/recall scores are as follows:
 
 - `average='macro'` precision/recall are:
@@ -70,12 +71,14 @@ As you can see, the example here is imbalanced (class `a` has 80% frequency whil
 Also, it's very easy to see from the formula that recall scores for `'micro'` and `'weighted'` are equal.
 
 
-### Why is accuracy == recall == precision for `average='micro'`?
+### Why is accuracy == recall == precision == f1-score for `average='micro'`?
 
 
+If we look at the multilabel confusion matrix as constructed above, each sub-matrix corresponds to a One vs Rest classification problem; i.e. in each _not_ column/row of a sub-matrix, the other two labels are accounted for. 
+
+[![confusion matrices][6]][6]
 
 
----
 
 
 
@@ -88,31 +91,63 @@ The code used to make the multiclass confusion matrix plots.
 
 ```python
 import matplotlib.pyplot as plt
+import matplotlib as mpl
+from sklearn.utils.multiclass import unique_labels
 
-def plot_mcm(y_true, y_pred, labels=list('abc')):
+def plot_confusion_matrix(y_true, y_pred, ax, cmap=None):
+    
+    cm = metrics.confusion_matrix(y_true, y_pred)
+    n_classes = cm.shape[0]
+    Z = np.arange(1,n_classes**2+1).reshape(n_classes, n_classes)
+    X = np.arange(n_classes + 1)
+    Y = np.arange(n_classes + 1)[::-1]
+    
+    ax.pcolormesh(X, Y, Z, cmap=cmap)
+    for i in X[:-1]:
+        for j in Y[1:]:
+            ax.text(j+0.5, n_classes-i-0.5, cm[i,j], ha="center", va="center", color='black', fontsize=20)
 
-    fig, ax = plt.subplots(1,len(labels), figsize=(12,5), facecolor='white')
+    display_labels = unique_labels(y_true, y_pred)
+    ax.set(xticks=X[1:]-0.5, yticks=Y[:-1]-0.5, xticklabels=display_labels, yticklabels=display_labels)
+
+    
+def plot_mcm(y_true, y_pred, labels=list('abc'), cmaps=None):
+
+    fig, ax = plt.subplots(1,len(labels), figsize=(12,3), facecolor='white')
     y_true = np.array(y_true)
     y_pred = np.array(y_pred)
     
-    for i, label in enumerate(sorted(labels)):
+    for i, (label, cmap) in enumerate(zip(labels, cmaps)):
         true = np.array([f'not {label}']*len(y_true))
         pred = true.copy()
         # only consider the current label
         true[y_true == label] = label
         pred[y_pred == label] = label
         # compute the confusion matrix for the current label
-        metrics.ConfusionMatrixDisplay.from_predictions(true, pred, ax=ax[i], colorbar=False)
-        for t in ax[i].texts:
-            t.set_size(20)
-        ylabel, xlabel = ax[i].get_ylabel(), ax[i].get_xlabel()
-        ax[i].set(ylabel='', xlabel='')
+        plot_confusion_matrix(true, pred, ax=ax[i], cmap=cmap)
             
-    fig.supxlabel(xlabel, size=20)
-    fig.supylabel(ylabel, size=20)
+    fig.supxlabel('Predicted label', size=20)
+    fig.supylabel('True label', size=20)
     fig.tight_layout()
 
-plot_mcm(y_true, y_pred)  # plot multilabel confusion matrices
+cmaps = [
+    mpl.colors.ListedColormap(['yellow', 'red', 'brown', 'purple']),
+    mpl.colors.ListedColormap(['yellow', 'blue', 'pink', 'purple']),
+    mpl.colors.ListedColormap(['yellow', 'green', 'orange', 'purple'])
+]
+
+plot_mcm(y_true, y_pred, cmaps=cmaps)  # plot multilabel confusion matrices
+
+
+
+# plot multiclass confusion matrices
+cmap1 = mpl.colors.ListedColormap(['yellow', 'red', 'red','blue', 'yellow', 'blue', 'green', 'green', 'yellow'])
+cmap2 = mpl.colors.ListedColormap(['yellow', 'pink', 'orange','brown', 'yellow', 'orange', 'brown', 'pink', 'yellow'])
+fig, ax = plt.subplots(1, 2, facecolor='white', figsize=(12,3))
+plot_confusion_matrix(y_true, y_pred, ax=ax[0], cmap=cmap1)
+ax[0].set_xlabel('Recall', fontsize=20)
+plot_confusion_matrix(y_true, y_pred, ax=ax[1], cmap=cmap2)
+ax[1].set_xlabel('Precision', fontsize=20);
 ```
 
 
@@ -178,4 +213,6 @@ def custom_scorer(scorer, y_true, y_pred, labels=list('abc')):
   [2]: https://i.stack.imgur.com/e01xN.png
   [3]: https://i.stack.imgur.com/fp4td.png
   [4]: https://i.stack.imgur.com/JMDrn.png
-  [5]: https://i.stack.imgur.com/Iuf1G.png
+<!---  [5]: https://i.stack.imgur.com/Iuf1G.png --->
+  [5]: https://i.stack.imgur.com/JsedR.png
+  [6]: https://i.stack.imgur.com/wkJRn.png
