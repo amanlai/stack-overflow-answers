@@ -1,22 +1,22 @@
-## How to solve ValueError: Target is multiclass but average='binary'
+## How to solve ValueError: Target is multiclass but average='binary' in scikit-learn
 
 The error is pretty self-explanatory. It is saying for a problem with more than 2 classes, there needs to be some kind of averaging rule. The valid rules are: `'micro'`, `'macro'`, `'weighted'` and `None` (the documentation lists `'samples'` but it's not applicable for multi-class targets). 
 
-If we look at its [source code][1], multi-class problems are treated like a multi-label problem when it comes to precision and recall score computation because the underlying confusion matrix used (`multilabel_confusion_matrix`) is the same.<sup>1</sup> This confusion matrix creates a 3D array where each "plane" is the 2x2 confusion matrix where the positive value is one of the labels.
+If we look at its [source code][1], multi-class problems are treated like a multi-label problem when it comes to precision and recall score computation because the underlying confusion matrix used (`multilabel_confusion_matrix`) is the same.<sup>1</sup> This confusion matrix creates a 3D array where each "sub-matrix" is the 2x2 confusion matrix where the positive value is one of the labels.
 
 ### What are the differences between each averaging rule?
 
 - With `average=None`, the precision/recall scores of each class is returned (without any averaging), so we get an array of scores whose length is equal to the number of classes.<sup>2</sup>
 
-- With `average='macro'`, precision/recall is computed for each class and then the average is taken.
+- With `average='macro'`, precision/recall is computed for each class and then the average is taken. Its formula is as follows:
 
   [![macro][2]][2]
 
-- With `average='micro'`, the contributions of all classes are summed up to compute the average precision/recall.
+- With `average='micro'`, the contributions of all classes are summed up to compute the average precision/recall. Its formula is as follows:
 
   [![micro][3]][3]
 
-- `average='weighted'` is really a weighted macro average where the weights are the actual positive classes.
+- `average='weighted'` is really a weighted macro average where the weights are the actual positive classes. Its formula is as follows:
 
   [![weighted][4]][4]
 
@@ -27,9 +27,9 @@ Let's consider an example.
 import numpy as np
 from sklearn import metrics
 y_true, y_pred = np.random.default_rng(0).choice(list('abc'), size=(2,100), p=[.8,.1,.1])
+mcm = metrics.multilabel_confusion_matrix(y_true, y_pred)
 ```
-The multilabel confusion matrix for this example looks like the following.
-
+The multilabel confusion matrix computed above looks like the following.
 
 [![confusion matrix][5]][5]
 
@@ -66,19 +66,35 @@ The respective precision/recall scores are as follows:
   precision_weighted == metrics.precision_score(y_true, y_pred, average='weighted')  # True
   ```
 
-As you can see, the example here is imbalanced (class `a` has 80% frequency while `b` and `c` have 10% each). The main difference between the averaging rules is that macro-averaging doesn't account for class imbalance but micro and weighted do. So `'macro'` may result in an "artificially" high or low score depending on the imbalance.
+As you can see, the example here is imbalanced (class `a` has 80% frequency while `b` and `c` have 10% each). The main difference between the averaging rules is that `'macro'`-averaging doesn't account for class imbalance but `'micro'` and `'weighted'` do. So `'macro'` is sensitive to the class imbalance and may result in an "artificially" high or low score depending on the imbalance.
 
 Also, it's very easy to see from the formula that recall scores for `'micro'` and `'weighted'` are equal.
 
 
 ### Why is accuracy == recall == precision == f1-score for `average='micro'`?
 
+It may be easier to understand it visually.
 
 If we look at the multilabel confusion matrix as constructed above, each sub-matrix corresponds to a One vs Rest classification problem; i.e. in each _not_ column/row of a sub-matrix, the other two labels are accounted for. 
+
+For example, for the first sub-matrix, there are
+
+- 57 true positives (`a`)
+- 16 false negatives (either `b` or `c`)
+- 15 false positives (either `b` or `c`)
+- 12 true negatives
+
+For the computation of precision/recall, only TP, FN and FP matter. As detailed above, FN and FP counts could be either `b` or `c`; since it is binary, this sub-matrix, by itself, cannot say how many of each is predicted; however, we can determine exactly how many of each were correctly classified by computing a multiclass confusion matrix by simply calling the `confusion_matrix()` method.
+```python
+mccm = metrics.confusion_matrix(y_true, y_pred)
+```
+
+The following graph plots the same confusion matrix (`mccm`) using different background colors (yellow background corresponds to TP, red background corresponds to false negatives in the first sub-matrix, orange correspond to false positives in the third sub-matrix etc.). So these are actually TP, FN and FP in the multilabel confusion matrix "expanded" to account for exactly what was the negative class. The color scheme on the left graph matches the colors of TP and FN counts in the multilabel confusion matrix (those used to determine _recall_) and the color scheme on the right graph matches the colors of TP and FP (those used to determine _precision_).
 
 [![confusion matrices][6]][6]
 
 
+With `average='micro'`, the ratio of yellow background numbers and all numbers in the left graph determine _recall_ and the yellow background numbers and all numbers in the right graph determine _precision_. If we look closely the same ratio also determines _accuracy_. Moreover, since _f1-score_ is the harmonic mean of _precision_ and _recall_ and given they are equal, we have the relationship `recall == precision == accuracy == f1-score`.
 
 
 
@@ -215,4 +231,4 @@ def custom_scorer(scorer, y_true, y_pred, labels=list('abc')):
   [4]: https://i.stack.imgur.com/JMDrn.png
 <!---  [5]: https://i.stack.imgur.com/Iuf1G.png --->
   [5]: https://i.stack.imgur.com/JsedR.png
-  [6]: https://i.stack.imgur.com/wkJRn.png
+  [6]: https://i.stack.imgur.com/tqLzR.png
