@@ -1,3 +1,5 @@
+This post was first used to answer [this](https://stackoverflow.com/q/32554527/19123103) Stack Overflow question.
+
 ## How to solve `TypeError: list indices must be integers or slices, not str`?
 
 As the message says, this error occurs when a string is used to index a list. _Most_ of the cases leading to this error can be summarized in two cases:
@@ -6,7 +8,7 @@ As the message says, this error occurs when a string is used to index a list. _M
 
 #### 1.1. Index a list as if it was a dictionary
 
-This case commonly occurs when a json object is converted into a Python object but there's a dictionary nested inside a list. In the example below, the value under the `'summary'` key is a list than contains a single dictionary. So if one tries to get the home score using `json['summary']['home_score']`, it will show an error. 
+This case commonly occurs when a json object is converted into a Python object but there's a dictionary nested inside a list. It is especially annoying (and easy to overlook) if the list has a single dictionary inside it. In the example below, the value under the `'summary'` key is a list than contains a single dictionary. So if one tries to get the home score using `json['summary']['home_score']`, it will show an error. 
 
 ```python
 json = {
@@ -36,11 +38,11 @@ Another common mistake is to initialize a list but try to assign values to it us
 
 ```python
 d = []
-d['key'] = 1                              # <---- TypeError
+d['key'] = 1                                # <---- TypeError
 
 
 d = {}
-d['key'] = 1                              # <---- OK
+d['key'] = 1                                # <---- OK
 ```
 
 
@@ -54,21 +56,26 @@ A very common mistake is when one tries to index a list using a value from a use
 lst = ['a', 'b', 'c']
 index = input()
 
-lst[index]                # <---- TypeError: list indices must be integers or slices, not str
-lst[int(index)]           # <---- OK
+lst[index]                                  # <---- TypeError: list indices must be integers or slices, not str
+lst[int(index)]                             # <---- OK
 ```
 
 #### 2.2. Using a list of strings to index a list
 
-Another common mistake is to loop over a list and use a list item to index a list. Python's `for` is similar to Perl's `foreach` in the sense that the loop is over a collection of items, so since the list is already being iterated over, there's no need to index it again; a solution is to use the item directly for whatever operation that needs to be done with it.
+Another common mistake is to loop over a list and use a list item to index a list. Python's `for` is similar to Perl's `foreach` in the sense that the loop is over a collection of items, so since the list is already being iterated over, there's no need to index it again. A solution is to use the item directly for whatever operation that needs to be done with it. Or perhaps loop over a `range` object that constructed using the length of the list.
 ```python
 lst = ['a', 'b', 'c', 'd']
 
 for i in lst:
-    if lst[i] == 'b':     # <---- TypeError
+    if lst[i] == 'b':                       # <---- TypeError
         pass
 
 for i in lst:
-    if i == 'b':          # <---- OK
+    if i == 'b':                            # <---- OK
+        pass
+    
+for i in range(len(lst)):                   # <---- OK
+    if lst[i] == 'b':
         pass
 ```
+N.B. This is OP's case. A for-loop over a string uses a string to index a list. The solution is to loop over a range object.
