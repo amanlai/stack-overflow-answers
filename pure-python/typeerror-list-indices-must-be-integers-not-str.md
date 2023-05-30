@@ -2,7 +2,7 @@ This post was first used to answer [this](https://stackoverflow.com/q/32554527/1
 
 ## How to solve `TypeError: list indices must be integers or slices, not str`?
 
-As the message says, this error occurs when a string is used to index a list. _Most_ of the cases leading to this error can be summarized in two cases:
+As the message says, this error occurs when a string is used to index a list. _Most_ of the cases leading to this error can be summarized in the following cases.
 
 ### 1. A list is used as if it were a dictionary
 
@@ -18,10 +18,10 @@ json = {
     ]
 }
 
-json['summary']['home_score']               # TypeError: list indices must be integers or slices, not str
-json['summary'][0]['home_score']            # OK (returns the first item)
+json['summary']['home_score']               # <---- TypeError: list indices must be integers or slices, not str
+json['summary'][0]['home_score']            # <---- OK (returns the first item)
 #              ^^^   <---- index the list here
-[d['home_score'] for d in json['summary']]  # OK (returns a list)
+[d['home_score'] for d in json['summary']]  # <---- OK (returns a list)
 ```
 
 When making a http request, an API call, etc. the outcome is usually very nested and it's not very obvious how to handle that data but with a simple debugging step such as printing the type, length etc. of the data usually shows how to handle it.
@@ -45,6 +45,23 @@ d = {}
 d['key'] = 1                                # <---- OK
 ```
 
+#### 1.3. A pandas dataframe is accidentally changed into a list
+
+A common way to change column labels of a pandas dataframe is to directly assign a list of strings intended to be the new labels to `pd.DataFrame.columns` attribute. If it's assigned to `pd.DataFrame` instead, the entire dataframe gets replaced by a list and it's not possible to access a column by label anymore.
+
+```python
+import pandas as pd
+df = pd.DataFrame([range(4), range(4)])
+df = ['A', 'B', 'C', 'D']
+df['A']                                     # <---- TypeError
+
+
+df = pd.DataFrame([range(4), range(4)])
+df.columns = ['A', 'B', 'C', 'D']
+# ^^^^^^^^  <---- assign column labels here
+df['A']                                     # <---- OK
+```
+
 
 ### 2. A string is used as if it were an integer
 
@@ -62,10 +79,17 @@ lst[int(index)]                             # <---- OK
 
 #### 2.2. Using a list of strings to index a list
 
-Another common mistake is to loop over a list and use a list item to index a list. Python's `for` is similar to Perl's `foreach` in the sense that the loop is over a collection of items, so since the list is already being iterated over, there's no need to index it again. A solution is to use the item directly for whatever operation that needs to be done with it. Or perhaps loop over a `range` object that constructed using the length of the list.
-```python
-lst = ['a', 'b', 'c', 'd']
+Another common mistake is to loop over a list and use a list item to index a list. Python's `for` is similar to Perl's `foreach` in the sense that the loop is over a collection of items. Since the list is already being iterated over, there's no need to index it again, so a solution is to use the item directly for whatever operation that needs to be done with it. Or perhaps loop over a `range` object that constructed using the length of the list.
 
+```python
+lst = ['a', 'b', 'a', 'd']
+
+lst['a']                                    # <---- TypeError
+lst[lst.index('a')]                         # <---- OK
+```
+
+This error probably happens much more often in a loop where `lst` was created dynamically.
+```python
 for i in lst:
     if lst[i] == 'b':                       # <---- TypeError
         pass
