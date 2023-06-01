@@ -4,24 +4,6 @@ from perfplot import plot
 import matplotlib.pyplot as plt
 
 
-df = pd.DataFrame({'col1': range(1000)})
-di1 = {k: k+1 for k in range(-1000, 1)}
-di2 = {0: 1}
-
-%timeit df['col1'].map(di1).fillna(df['col1'])
-# 1.19 ms ± 6.77 µs per loop (mean ± std. dev. of 7 runs, 1,000 loops each)
-
-%timeit df['col1'].replace(di1)
-# 41.4 ms ± 400 µs per loop (mean ± std. dev. of 7 runs, 100 loops each)
-
-%timeit df['col1'].map(di2).fillna(df['col1'])
-# 691 µs ± 27.9 µs per loop (mean ± std. dev. of 7 runs, 1,000 loops each)
-
-%timeit df['col1'].replace(di2)
-# 157 µs ± 3.34 µs per loop (mean ± std. dev. of 7 runs, 10,000 loops each)
-
-
-
 # Code used to produce the plots
 
 kernels = [lambda df, di: df['col1'].replace(di), 
