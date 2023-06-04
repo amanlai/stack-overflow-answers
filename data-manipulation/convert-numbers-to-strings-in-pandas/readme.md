@@ -1,6 +1,8 @@
-It's a post that was first posted as an answer to the following Stack Overflow question and can be found at https://stackoverflow.com/a/75528571/19123103
-
 ## Convert columns to string in Pandas
+
+<sup> It's a post that was first posted as an answer to the following Stack Overflow question, which may be found [here](https://stackoverflow.com/a/75528571/19123103). </sup>
+
+https://stackoverflow.com/a/75505969/19123103
 
 > I have the following DataFrame from a SQL query:
 > ```none
