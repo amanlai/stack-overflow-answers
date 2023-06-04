@@ -1,6 +1,6 @@
-It's a post that was first posted as an answer to the following Stack Overflow question and can be found at https://stackoverflow.com/a/75505969/19123103
-
 ## Change column type in pandas
+
+<sup> It's a post that was first posted as an answer to the following Stack Overflow question, which may be found [here](https://stackoverflow.com/a/75505969/19123103). </sup>
 
 > I created a DataFrame from a list of lists:
 > ```python
