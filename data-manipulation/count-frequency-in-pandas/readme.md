@@ -1,6 +1,6 @@
-The question may be found here: https://stackoverflow.com/q/22391433/19123103
-
 ## Count the frequency that a value occurs in a dataframe column
+
+<sup> This is a post that first appeared as an answer to [this Stack Overflow question](https://stackoverflow.com/q/22391433/19123103). </sup>
 
 > I have a dataset
 > ```none
