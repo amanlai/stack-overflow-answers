@@ -1,6 +1,6 @@
-It's a post that was first posted as an answer to the following Stack Overflow question and can be found at https://stackoverflow.com/a/73643899/19123103
-
 ## Create new column based on values from other columns / apply a function of multiple columns, row-wise in Pandas
+
+<sup> It's a post that was first posted as an answer to the following Stack Overflow question and can be found at https://stackoverflow.com/a/73643899/19123103 </sup>
 
 > I want to apply my custom function (it uses an if-else ladder) to these six columns (`ERI_Hispanic`, `ERI_AmerInd_AKNatv`, `ERI_Asian`, `ERI_Black_Afr.Amer`, `ERI_HI_PacIsl`, `ERI_White`) in each row of my dataframe.
 > 
@@ -56,6 +56,7 @@ Numba works on numpy arrays, so before using the `jit` decorator, you need to co
 ```python
 import numpy as np
 import numba as nb
+
 @nb.jit(nopython=True)
 def conditional_assignment(arr, res):    
     length = len(arr)
@@ -126,59 +127,8 @@ The approach using the optimized methods is 250 times faster than the equivalent
 <sup>1</sup>: In the below result, I show the performance of the three approaches using a dataframe with 24 mil rows (this is the largest frame I can construct on my machine). For smaller frames, the numba-jitted function consistently runs at least 50% faster than the other two as well (you can check yourself).
 
 ```python
-def pd_loc(df):
-    df['rno_defined'] = 'Other'
-    df.loc[df['eri_nat_amer'] == 1, 'rno_defined'] = 'A/I AK Native'
-    df.loc[df['eri_asian'] == 1, 'rno_defined'] = 'Asian'
-    df.loc[df['eri_afr_amer'] == 1, 'rno_defined'] = 'Black/AA'
-    df.loc[df['eri_hawaiian'] == 1, 'rno_defined'] = 'Haw/Pac Isl.'
-    df.loc[df['eri_white'] == 1, 'rno_defined'] = 'White'
-    df.loc[df[['eri_afr_amer', 'eri_asian', 'eri_hawaiian', 'eri_nat_amer', 'eri_white']].sum(1) > 1, 'rno_defined'] = 'Two Or More'
-    df.loc[df['eri_hispanic'] == 1, 'rno_defined'] = 'Hispanic'
-    return df
-
-def np_select(df):
-    conditions = [df['eri_hispanic'] == 1,
-                  df[['eri_afr_amer', 'eri_asian', 'eri_hawaiian', 'eri_nat_amer', 'eri_white']].sum(1).gt(1),
-                  df['eri_nat_amer'] == 1,
-                  df['eri_asian'] == 1,
-                  df['eri_afr_amer'] == 1,
-                  df['eri_hawaiian'] == 1,
-                  df['eri_white'] == 1]
-    outputs = ['Hispanic', 'Two Or More', 'A/I AK Native', 'Asian', 'Black/AA', 'Haw/Pac Isl.', 'White']
-    df['rno_defined'] = np.select(conditions, outputs, 'Other')
-    return df
-
-
-@nb.jit(nopython=True)
-def conditional_assignment(arr, res):
-    
-    length = len(arr)
-    for i in range(length):
-        if arr[i][3] == 1 :
-            res[i] = 'Hispanic'
-        elif arr[i][0] + arr[i][1] + arr[i][2] + arr[i][4] + arr[i][5] > 1 :
-            res[i] = 'Two Or More'
-        elif arr[i][0]  == 1:
-            res[i] = 'Black/AA'
-        elif arr[i][1] == 1:
-            res[i] = 'Asian'
-        elif arr[i][2] == 1:
-            res[i] = 'Haw/Pac Isl.'
-        elif arr[i][4] == 1 :
-            res[i] = 'A/I AK Native'
-        elif arr[i][5] == 1:
-            res[i] = 'White'
-        else:
-            res[i] = 'Other'
-            
-    return res
-
-def nb_loop(df):
-    cols = [c for c in df.columns if c.startswith('eri_')]
-    res = np.empty(len(df), dtype=f"<U{len('A/I AK Native')}")
-    df['rno_defined'] = conditional_assignment(df[cols].values, res)
-    return df
+import pandas as pd
+from tester import pd_loc, np_select, nb_loop
 
 # df with 24mil rows
 n = 4_000_000
