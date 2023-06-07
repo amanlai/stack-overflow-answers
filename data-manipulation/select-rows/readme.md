@@ -123,27 +123,8 @@ df = pd.DataFrame({'A': 'foo bar foo baz foo bar foo foo'.split()*100000,
 %timeit df.query("(B % 5) **2 < 0.1")
 # 26.3 ms ± 320 µs per loop (mean ± std. dev. of 10 runs, 100 loops each)
 ```
-<sup>3</sup>: Code used to produce the performance graphs of the two methods for strings and numbers.
-```python
-from perfplot import plot
-constructor = lambda n: pd.DataFrame({'A': 'foo bar foo baz foo bar foo foo'.split()*n, 'B': np.random.rand(8*n)})
-plot(
-    setup=constructor,
-    kernels=[lambda df: df[(df.B%5)**2<0.1], lambda df: df.query("(B%5)**2<0.1")],
-    labels= ['df[(df.B % 5) **2 < 0.1]', 'df.query("(B % 5) **2 < 0.1")'],
-    n_range=[2**k for k in range(4, 24)],
-    xlabel='Rows in DataFrame',
-    title='Multiple mathematical operations on numbers',
-    equality_check=pd.DataFrame.equals);
-plot(
-    setup=constructor,
-    kernels=[lambda df: df[df.A == 'foo'], lambda df: df.query("A == 'foo'")],
-    labels= ["df[df.A == 'foo']", """df.query("A == 'foo'")"""],
-    n_range=[2**k for k in range(4, 24)],
-    xlabel='Rows in DataFrame',
-    title='Comparison operation on strings',
-    equality_check=pd.DataFrame.equals);
-```
+<sup>3</sup>: Code used to produce the performance graphs of the two methods for strings and numbers can be found on [this repo.][5]
+
 
 
 
@@ -151,3 +132,4 @@ plot(
   [2]: https://numexpr.readthedocs.io/projects/NumExpr3/en/latest/user_guide.html#supported-operators
   [3]: https://i.stack.imgur.com/AgEhg.png
   [4]: https://stackoverflow.com/a/57338153/19123103
+  [5]: ./perfplot_tester.py
