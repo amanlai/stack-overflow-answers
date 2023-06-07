@@ -1,6 +1,6 @@
-It's a post that was first posted as an answer to the following Stack Overflow question and can be found at https://stackoverflow.com/a/73762002/19123103
-
 ## How do I select rows from a DataFrame based on column values?
+
+<sup>It's a post that was first posted as an answer to the following Stack Overflow question and can be found [here](https://stackoverflow.com/a/73762002/19123103). </sup>
 
 > How can I select rows from a DataFrame based on values in some column in Pandas?
 > 
@@ -123,7 +123,7 @@ df = pd.DataFrame({'A': 'foo bar foo baz foo bar foo foo'.split()*100000,
 %timeit df.query("(B % 5) **2 < 0.1")
 # 26.3 ms ± 320 µs per loop (mean ± std. dev. of 10 runs, 100 loops each)
 ```
-<sup>3</sup>: Code used to produce the performance graphs of the two methods for strings and numbers can be found on [this repo.][5]
+<sup>3</sup>: Code used to produce the performance graphs of the two methods for strings and numbers can be found on [the current repo.][5]
 
 
 
