@@ -2,6 +2,7 @@ It's a post that was first posted as an answer to the following Stack Overflow q
 
 ## How to determine the length of lists in a pandas dataframe column
 
+
 > I have a dataframe like this:
 > 
 > ```none
@@ -60,25 +61,6 @@ Essentially, mapping `len` over lists is approx. 2.5 times faster than looping o
 
 [![res][1]][1]
 
-Code used to produce the plot above:
-```python
-import pandas as pd
-import random, string, perfplot
-random.seed(365)
-
-plt.figure(figsize=(9,5))
-perfplot.plot(
-    setup=lambda n: pd.Series([random.sample(string.ascii_letters, random.randint(1, 20)) for _ in range(n)]),
-    kernels=[lambda ser: ser.str.len(), lambda ser: ser.map(len), lambda ser: list(map(len, ser.tolist())), lambda ser: [len(x) for x in ser]],
-    labels=["ser.str.len()", "ser.map(len)", "list(map(len, ser.tolist()))", "[len(x) for x in ser]"],
-    n_range=[2**k for k in range(21)],
-    xlabel='Length of dataframe',
-    equality_check=lambda x,y: x.eq(y).all()
-)
-ax = plt.gca()
-xticks = ax.get_xticks()[:-1]
-ax.set_xticks(xticks, [f"{int(x):,}" for x in xticks]);
-```
 
 
   [1]: https://i.stack.imgur.com/QZcyE.png
