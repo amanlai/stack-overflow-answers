@@ -1,7 +1,6 @@
-It's a post that was first posted as an answer to the following Stack Overflow question and can be found at https://stackoverflow.com/a/75796628/19123103
-
 ## How to determine the length of lists in a pandas dataframe column
 
+<sup>It's a post that was first posted as an answer to the following Stack Overflow question and can be found [here](https://stackoverflow.com/a/75796628/19123103). </sup>
 
 > I have a dataframe like this:
 > 
