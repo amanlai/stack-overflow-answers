@@ -1,6 +1,6 @@
 ## Remap values in pandas column with a dict, preserve NaNs
 
-<sup> It's a post that was first posted as an answer to the following Stack Overflow question, which may be found [here](https://stackoverflow.com/a/75933438/19123103). </sup>
+<sup> This write-up is a combination of posts that first appeared as answers to Stack Overflow questions ([here](https://stackoverflow.com/a/75933438/19123103) and [here](https://stackoverflow.com/a/73436639/19123103)). </sup>
 
 
 > I have a dictionary which looks like this: `di = {1: "A", 2: "B"}`
@@ -30,7 +30,9 @@ N.B. If the remapping dictionary `di` is very large, this may run into memory is
 
 #### 2. `map`+`fillna` vs `replace`. Which is better?
 
-If we look at the source code, if a dictionary is passed to it, `map` is an optimized method that calls a Cython-optimized `take_nd()` function to make replacements and `fillna()` calls `where()` (another optimized method) to fill values. On the other hand, `replace()` is implemented in Python and uses a loop over the dictionary. So if the dictionary is large, `replace` can potentially be _thousands of times_ slower than `map`+`fillna`. Let's illustrate the difference by the following example where a single value (`0`) is replaced in the column (one using a dictionary of length 1000 (`di1`) and another using a dictionary of length 1 (`di2`)).
+If we look at the source code, if a dictionary is passed to it, `map` is an optimized method that calls a Cython-optimized `take_nd()` function to make replacements and `fillna()` calls `where()` (another optimized method) to fill values. On the other hand, `replace()` is implemented in Python and uses a loop over the dictionary. So if the dictionary is large, `replace` can potentially be _thousands of times_ slower than `map`+`fillna`; however, if the dictionary is small, `replace` may outperform `map`+`fillna`. 
+
+Let's illustrate the difference by the following example where a single value (`0`) is replaced in the column (one using a dictionary of length 1000 (`di1`) and another using a dictionary of length 1 (`di2`)).
 ```python
 df = pd.DataFrame({'col1': range(1000)})
 di1 = {k: k+1 for k in range(-1000, 1)}
