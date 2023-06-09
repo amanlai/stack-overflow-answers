@@ -8,6 +8,7 @@
 > del df.column_name
 > ```
 
+---
 
 Deleting a column using `del` is not only problematic (as explained by [@firelynx][1]) but also very slow. For example, it's ~37 times slower than `drop()`. Code used to make this assertion can be found on the current repo [here](./timeit_test.py).
 
