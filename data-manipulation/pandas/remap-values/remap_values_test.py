@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd
-from perfplot import plot
+import perfplot
 import matplotlib.pyplot as plt
 
 
@@ -11,9 +11,11 @@ kernels = [lambda df, di: df['col1'].replace(di),
 labels = ["replace", "map+fillna"]
 
 
+plt.figure(figsize=(15, 15), facecolor='white')
 # first plot
 N, m = 100000, 20
-plot(
+plt.subplot(2, 2, 1)
+perfplot.plot(
     setup=lambda n: (pd.DataFrame({'col1': np.resize(np.arange(m*n), N)}), 
                      {k: (k+1)/2 for k in range(n)}),
     kernels=kernels, labels=labels,
@@ -29,7 +31,8 @@ plt.xticks(np.arange(1, xmax+1, 2));
 # second plot
 N, m = 100000, 1000
 di = {k: (k+1)/2 for k in range(m)}
-plot(
+plt.subplot(2, 2, 2)
+perfplot.plot(
     setup=lambda n: pd.DataFrame({'col1': np.resize(np.arange((n-100)*m//100, n*m//100), N)}),
     kernels=kernels, labels=labels,
     n_range=[1, 5, 10, 15, 25, 40, 55, 75, 100],
@@ -41,7 +44,8 @@ plot(
 # third plot
 m, n = 10, 0.01
 di = {k: (k+1)/2 for k in range(m)}
-plot(
+plt.subplot(2, 2, 3)
+perfplot.plot(
     setup=lambda N: pd.DataFrame({'col1': np.resize(np.arange((n-1)*m, n*m), N)}),
     kernels=kernels, labels=labels,
     n_range=[2**k for k in range(6, 21)], 
@@ -53,7 +57,8 @@ plot(
 # fourth plot
 m, n = 100, 0.01
 di = {k: (k+1)/2 for k in range(m)}
-plot(
+plt.subplot(2, 2, 4)
+perfplot.plot(
     setup=lambda N: pd.DataFrame({'col1': np.resize(np.arange((n-1)*m, n*m), N)}),
     kernels=kernels, labels=labels,
     n_range=[2**k for k in range(6, 21)], 

@@ -34,6 +34,8 @@ If we look at the source code, if a dictionary is passed to it, `map` is an opti
 
 Let's illustrate the difference by the following example where a single value (`0`) is replaced in the column (one using a dictionary of length 1000 (`di1`) and another using a dictionary of length 1 (`di2`)).
 ```python
+import pandas as pd
+
 df = pd.DataFrame({'col1': range(1000)})
 di1 = {k: k+1 for k in range(-1000, 1)}
 di2 = {0: 1}
