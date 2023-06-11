@@ -1,4 +1,7 @@
-Instead of via `gridspec_kw`, `height_ratios`/`width_ratios` can be passed to `plt.subplots` as kwargs since matplotlib 3.6.0. So the relative height can be set as follows.
+## How to create subplots with different sizes?
+
+`height_ratios`/`width_ratios` can be passed to `plt.subplots` as kwargs since matplotlib 3.6.0. So the relative height can be set as follows.
+
 ```python
 import matplotlib.pyplot as plt
 import random
