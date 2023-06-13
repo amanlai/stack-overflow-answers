@@ -28,13 +28,6 @@
 > u'time': u'1488376800.000000000',
 > u'volume': 10041}]
 > ```
-> Then I pass the list to `json_normalize`. Try to get price which is in the nested list under 'mid'
-> ```python
-> result = json_normalize(data,'time',['time','volume','complete',['mid','h'],['mid','l'],['mid','c'],['mid','o']])
-> ```
-> which broke down 'time' data into each integer row by row.
-> 
-> I have checked related document. I have to pass a string or list object to the 2nd parameter of `json_normalize`. How can I pass the timestamp there without breaking down?
 > 
 > The columns of my expected output are:
 > 
@@ -43,7 +36,7 @@
 > ```
 
 
-
+---
 
 The data in the OP (after deserialized from a json string preferably using `json.load()`) is a list of nested dictionaries, which is an ideal data structure for `pd.json_normalize()` because it converts a list of dictionaries and flattens each dictionary into a single row. So the length of the list determines the number of rows and the total number of key-value pairs in the dictionaries determine the number of columns.
 
