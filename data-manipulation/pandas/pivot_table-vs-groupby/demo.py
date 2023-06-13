@@ -20,3 +20,13 @@ gb = df.groupby(['a','b'])[['c']].sum().unstack(['b'])
 pt = df.pivot_table(index=['a'], columns=['b'], values=['c'], aggfunc='sum')
 
 print(gb.equals(pt))  # True
+
+
+(
+    df
+    .pivot_table(index=['a'], columns=['b'], values=['c'], aggfunc='sum')
+    .stack(['b'])
+    .equals(
+        df.groupby(['a','b'])[['c']].sum()
+    )
+) # True
