@@ -1,23 +1,10 @@
-It's a post that was first posted as an answer to the following Stack Overflow question and can be found at https://stackoverflow.com/a/75358566/19123103
-
 ## How to normalize json correctly by Python Pandas
 
-> I want to do is load a json file of forex historical price data by Pandas and do statistic with the data. I have go through many topics on Pandas and parsing json file. I want to pass a json file with extra value and nested list to a pandas dataframe.
+<sup> It's a post that was first posted as an answer to the following Stack Overflow question and can be found [here](https://stackoverflow.com/a/75358566/19123103). </sup>
+
+> I want to load a json file in Pandas and do statistics with the data. I want to convert a nested json file into a pandas dataframe.
 > 
-> I got a json file `'EUR_JPY_H8.json'`
-> 
-> First I import the lib that required,
-> ```python
-> import pandas as pd
-> import json
-> from pandas.io.json import json_normalize
-> ```
-> Then load the json file,
-> ```python
-> with open('EUR_JPY_H8.json') as data_file:    
->     data = json.load(data_file)
-> ```
-> I got a list below:
+> My data looks like below:
 > ```none
 > [{u'complete': True,
 > u'mid': {u'c': u'119.743',
