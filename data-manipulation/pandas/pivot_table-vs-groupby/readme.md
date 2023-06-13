@@ -1,6 +1,7 @@
-It's a post that was first posted as an answer to the following Stack Overflow question and can be found at https://stackoverflow.com/a/72933069/19123103
-
 ## Difference between groupby and pivot_table
+
+<sup> It's a post that was first posted as an answer to the following Stack Overflow question and can be found [here](https://stackoverflow.com/a/72933069/19123103). </sup>
+
 > I just started learning Pandas and was wondering if there is any difference between `groupby` and `pivot_table` functions. Can anyone help me understand the difference between them?
 
 ### `pivot_table = groupby + unstack` and `groupby = pivot_table + stack` are True.
