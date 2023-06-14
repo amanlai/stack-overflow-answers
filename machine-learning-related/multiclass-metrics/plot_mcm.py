@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 from sklearn.utils.multiclass import unique_labels
+from sklearn import metrics
 
 def plot_confusion_matrix(y_true, y_pred, ax, cmap=None):
     
@@ -9,7 +10,7 @@ def plot_confusion_matrix(y_true, y_pred, ax, cmap=None):
     Z = np.arange(1,n_classes**2+1).reshape(n_classes, n_classes)
     X = np.arange(n_classes + 1)
     Y = np.arange(n_classes + 1)[::-1]
-    
+
     ax.pcolormesh(X, Y, Z, cmap=cmap)
     for i in X[:-1]:
         for j in Y[1:]:

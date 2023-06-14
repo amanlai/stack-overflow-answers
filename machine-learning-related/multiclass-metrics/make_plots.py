@@ -16,6 +16,7 @@ plot_mcm(y_true, y_pred, cmaps=cmaps)  # plot multilabel confusion matrices
 
 
 
+
 # plot multiclass confusion matrices
 cmap1 = mpl.colors.ListedColormap(['yellow', 'red', 'red','blue', 'yellow', 'blue', 'green', 'green', 'yellow'])
 cmap2 = mpl.colors.ListedColormap(['yellow', 'pink', 'orange','brown', 'yellow', 'orange', 'brown', 'pink', 'yellow'])

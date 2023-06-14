@@ -97,22 +97,7 @@ With `average='micro'`, the ratio of yellow background numbers and all numbers i
 The code used to make the multiclass confusion matrix plots can be found on this repo [here](./make_plots.py).
 
 
-<sup>1</sup> You can check that it is indeed the case by constructing a random multi-class classification problem and its corresponding multi-label version and check the equality of the precision and recall scores.
-
-```python
-import numpy as np
-from sklearn import metrics
-y_true, y_pred = np.random.default_rng().choice(3, size=(2,100))             # multi-class
-y_true_multilabel, y_pred_multilabel = map(pd.get_dummies, (y_true, y_pred)) # multi-label
-
-for avg in (None, 'micro', 'macro', 'weighted'):
-    # precision and recall scores are the same for all averaging rules for both problems
-    p1 = metrics.precision_score(y_true, y_pred, average=avg)
-    p2 = metrics.precision_score(y_true_multilabel, y_pred_multilabel, average=avg)
-    r1 = metrics.recall_score(y_true, y_pred, average=avg)
-    r2 = metrics.recall_score(y_true_multilabel, y_pred_multilabel, average=avg)
-    assert np.array([p1 == p2]).all() and np.array([r1 == r2]).all()
-```
+<sup>1</sup> You can check that it is indeed the case by constructing a random multi-class classification problem and its corresponding multi-label version and check the equality of the precision and recall scores. This can be found on this repo [here](./demo.py).
 
 Also the `multilabel_confusion_matrix()` method is essentially a confusion matrix for each class. So its implementation looks very much like:
 ```python
@@ -130,29 +115,8 @@ def multilabel_confusion_matrix(y_true, y_pred, labels)
     return mcm
 ```
 
-<sup>2</sup> With `average=None`, the precision/recall scores of each class is returned (without any averaging), so we get an array of scores whose length is equal to the number of classes.
+<sup>2</sup> With `average=None`, the precision/recall scores of each class is returned (without any averaging), so we get an array of scores whose length is equal to the number of classes. The test can be found on this repo [here](./demo.py).
 
-```python
-def custom_scorer(scorer, y_true, y_pred, labels=list('abc')):
-    
-    y_true = np.array(y_true)
-    y_pred = np.array(y_pred)
-    
-    out = np.empty(shape=len(labels))
-    
-    for i, label in enumerate(sorted(labels)):
-        true = np.array([f'not {label}']*len(y_true))
-        pred = true.copy()
-        # only consider the current label
-        true[y_true == label] = label
-        pred[y_pred == label] = label
-        out[i] = scorer(true, pred, pos_label=label)
-        
-    return out
-
-(custom_scorer(metrics.precision_score, y_true, y_pred) == metrics.precision_score(y_true, y_pred, average=None)).all() # True
-(custom_scorer(metrics.recall_score, y_true, y_pred) == metrics.recall_score(y_true, y_pred, average=None)).all()       # True
-```
 
 
   [1]: https://github.com/scikit-learn/scikit-learn/blob/main/sklearn/metrics/_classification.py#L1714-L1740
