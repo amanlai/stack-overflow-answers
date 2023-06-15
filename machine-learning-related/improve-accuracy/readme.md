@@ -33,7 +33,7 @@ Also as [Abhinav Arora][2] mentioned, feature normalization is also something yo
 
 All in all, with very minimal additional code, the test accuracy was improved by 10 percentage points from 0.66 to 0.76.
 
-
+The code may be found on this repo [here](./demo.py).
 
 That said, for other datasets, it's very possible that adding polynomial features, normalization, handling outliers etc. simply cannot improve accuracy because the data is too limiting. In that case, you'll need to get more data to come up with more predictive features.
 
