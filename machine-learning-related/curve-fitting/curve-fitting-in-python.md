@@ -1,20 +1,13 @@
-It's a post that was first posted as an answer to the following Stack Overflow question and can be found at https://stackoverflow.com/a/75598551/19123103
-
 ## How to fit a curve to data using python
 
-> I have some points and I am trying to fit curve for this points. I know that there exist `scipy.optimize.curve_fit` function, but I do not understand the documentation, i.e. how to use this function.
-> 
-> My points: 
-> ```python
-> np.array([(1, 1), (2, 4), (3, 1), (9, 3)])
-> ```
-> 
-> Can anybody explain how to do that?
+<sup> It's a post that was first posted as an answer to a Stack Overflow question that can be found at [here](https://stackoverflow.com/a/75598551/19123103). </sup>
+
 
 
 `np.polyfit` fits a polynomial function to data (which is always a good starting point) but `scipy.optimize.curve_fit` is much more flexible because you can fit any function you want to the data ([Greg][1] also mentions this). 
 
 For example, to fit a polynomial function of degree 3, initialize a polynomial function `poly3d` and pass it off to `curve_fit` to compute its coefficients using the training values, `x` and `y`. Once you have `coefs_poly3d` computed, you can plug in other values to generate fitted values and plot a general function "around" the original training values. The following code produces the very same plot in [jabaldonedo's post][2].
+
 ```python
 def poly3d(x, a, b, c, d):
     return a + b*x + c*x**2 + d*x**3
@@ -31,6 +24,7 @@ y_data = poly3d(x_data, *coefs_poly3d)
 # plot the points
 plt.plot(x, y, 'ro', x_data, y_data);
 ```
+
 As mentioned before, `curve_fit` is more flexible in that you can fit any function. For example, looking at the data, it seems we can fit a sine function as well. Then simply initialize a sine function and pass it to `curve_fit` to compute `coefs_sine`. 
 
 Note that since `curve_fit` is an iterative algorithm, choosing an appropriate initial guess for the parameters (`a`, `b`, `c`, `d`) is sometimes crucial for the algorithm to converge. In the example below, it is initialized by `p0=[0, 0, -2, 0]`. You can, of course, make an educated guess by trial-and-error by plotting the data with different coefficients.
