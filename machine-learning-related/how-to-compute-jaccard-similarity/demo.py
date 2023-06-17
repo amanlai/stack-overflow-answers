@@ -1,32 +1,8 @@
-## How to compute jaccard similarity from a pandas dataframe
-
-<sup>It's a post that was first posted as an answer to a Stack Overflow question that can be found [here](https://stackoverflow.com/a/75830840/19123103). </sup>
-
-
-
-
-Jaccard similarity scores can also be calculated using [`scipy.spatial.distance.pdist`][1]. One of its metrics is `'jaccard'` which computes jaccard dissimilarity (so that the score has to be subtracted from 1 to get jaccard similarity). It returns a 1D array where each value corresponds to the jaccard similarity between two columns. 
-
-One could construct a Series from the scores by constructing a MultiIndex.
-
-```python
+import pandas as pd
 from scipy.spatial.distance import pdist
 jaccard_similarity = pd.Series(1 - pdist(df.values.T, metric='jaccard'), index=pd.MultiIndex.from_tuples([(c1, c2) for i, c1 in enumerate(df) for c2 in df.columns[i+1:]]))
-```
-Using [ayhan][2]'s setup, it produces the following:
-```python
-A  B    0.300000
-   C    0.457143
-   D    0.342857
-   E    0.466667
-B  C    0.294118
-   D    0.333333
-   E    0.233333
-C  D    0.405405
-   E    0.441176
-D  E    0.363636
-dtype: float64
-```
+
+
 
 If a matrix is desired, it can be constructed from `pdist` as well. Just construct an empty matrix and fill the off-diagonals by these values (and the diagonal by 1).
 ```python
