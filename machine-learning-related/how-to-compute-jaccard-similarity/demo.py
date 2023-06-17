@@ -1,6 +1,7 @@
 import pandas as pd
 from scipy.spatial.distance import pdist
 import numpy as np
+from sklearn.metrics import pairwise_distances
 
 jaccard_similarity = pd.Series(1 - pdist(df.values.T, metric='jaccard'), index=pd.MultiIndex.from_tuples([(c1, c2) for i, c1 in enumerate(df) for c2 in df.columns[i+1:]]))
 
@@ -38,6 +39,7 @@ def jaccard_matrix(df):
     return pd.DataFrame(result, index=df.columns, columns=df.columns)
 
 
+# sanity check
 df = pd.DataFrame(np.random.default_rng().binomial(1, 0.5, size=(100, 10))).add_prefix('col')
 x = pd.DataFrame(1 - pairwise_distances(df.values.T.astype(bool), metric='jaccard'), index=df.columns, columns=df.columns)
 y = jaccard_similarity_matrix(df)

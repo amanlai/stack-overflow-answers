@@ -41,8 +41,6 @@ def jaccard_similarity_matrix(df):
     result += result.T
     np.fill_diagonal(result, 1)
     return pd.DataFrame(result, index=df.columns, columns=df.columns)
-
-jaccard_similarity = jaccard_similarity_matrix(df)
 ```
 [![result][3]][3]
 
@@ -69,15 +67,7 @@ def jaccard_matrix(df):
     return pd.DataFrame(result, index=df.columns, columns=df.columns)
 ```
 
-All of these functions return the same output which can be verified as follows:
-```python
-df = pd.DataFrame(np.random.default_rng().binomial(1, 0.5, size=(100, 10))).add_prefix('col')
-x = pd.DataFrame(1 - pairwise_distances(df.values.T.astype(bool), metric='jaccard'), index=df.columns, columns=df.columns)
-y = jaccard_similarity_matrix(df)
-z = jaccard_matrix(df)
-
-np.allclose(x, y) and np.allclose(y, z)    # True
-```
+The demo of the function usages as well as an equality check can be found on the current repo [here](./demo.py).
 
   [0]: http://i.stack.imgur.com/8newK.png
   [1]: https://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.distance.pdist.html
