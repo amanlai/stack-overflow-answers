@@ -1,6 +1,6 @@
-It's a post that was first posted as an answer to the following Stack Overflow question and can be found at https://stackoverflow.com/a/75709136/19123103
-
 ## How to use `minimize` from `scipy` with constraints
+
+<sup> It's a post that was first posted as an answer to a Stack Overflow question that can be found [here](https://stackoverflow.com/a/75709136/19123103). </sup>
 
 > Let's suppose I have a matrix
 > ```python
