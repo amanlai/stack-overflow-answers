@@ -14,7 +14,7 @@ Regularization adds a norm of the coefficients to this function. The following i
 
 [![func2][3]][3]
 
-From the equation, it's clear that the regularization term is there to penalize large coefficients (the minimization problem is solving for the coefficients that minimize the objective function). The regularization strength is determined by `C` and as C increases, the regularization term becomes smaller (and for extremely large C values, it's as if there is no regularization at all).
+From the equation, it's clear that the regularization term is there to penalize large coefficients (the minimization problem is solving for the coefficients that minimize the objective function). Since the size of each coefficient depends on the scale of its corresponding variable, scaling the data is required so that the regularization penalizes each variable equally. The regularization strength is determined by `C` and as C increases, the regularization term becomes smaller (and for extremely large C values, it's as if there is no regularization at all).
 
 If the initial model is overfit (as in, it fits the training data too well), then adding a strong regularization term (with small `C` value) makes the model perform worse for the training data, but introducing such "noise" improves the model's performance on unseen (or test) data.
 
@@ -24,7 +24,9 @@ An example with 1000 samples and 200 features shown below. As can be seen from t
 
 [![C vs accuracy][4]][4]
 
+---
 
+Code used to to produce the graph can be found on this repo [here](./demo.py).
 
 
   [1]: https://i.stack.imgur.com/mzAMA.png
