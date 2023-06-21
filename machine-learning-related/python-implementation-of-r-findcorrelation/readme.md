@@ -1,6 +1,6 @@
 ## How to implement R's `caret::findCorrelation` in Python
 
-This post was originally posted as an answer to the following Stack Overflow question and can be found at https://stackoverflow.com/a/75379515/19123103
+<sup> This post was originally posted as an answer to a Stack Overflow question that can be found [here](https://stackoverflow.com/a/75379515/19123103). </sup>
 
 > #### Remove highly correlated columns from a pandas dataframe
 >
