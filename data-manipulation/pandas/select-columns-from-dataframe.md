@@ -1,6 +1,6 @@
-It's a post that was first posted as an answer to the following Stack Overflow question and can be found at https://stackoverflow.com/a/75901708/19123103
-
 ## Selecting columns from a dataframe via a list of column names
+
+<sup> It's a post that was first posted as an answer to a Stack Overflow question that can be found [here](https://stackoverflow.com/a/75901708/19123103). </sup>
 
 > I have a dataframe with a lot of columns in it. Now I want to select only certain columns. I have saved all the names of the columns that I want to select into a Python list and now I want to filter my dataframe according to this list. 
 > 
