@@ -2,29 +2,6 @@
 
 <sup> It's a post that was first posted as an answer to a Stack Overflow question that can be found [here](https://stackoverflow.com/a/75901708/19123103). </sup>
 
-> I have a dataframe with a lot of columns in it. Now I want to select only certain columns. I have saved all the names of the columns that I want to select into a Python list and now I want to filter my dataframe according to this list. 
-> 
-> I've been trying to do:
-> ```python
-> df_new = df[[list]]
-> ```
-> where `list` includes all the column names that I want to select.
-> 
-> However I get the error:
-> ```none
-> TypeError: unhashable type: 'list'
-> ```
-> 
-> When I do:
-> ```python
-> df_new = df[list]
-> ```
-> I get the error 
-> ```none
-> KeyError: not in index
-> ```
-> Any help on this one?
-
 
 #### 1. `[]` aka `__getitem__()`
 
