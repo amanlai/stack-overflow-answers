@@ -60,6 +60,8 @@ Essentially, mapping `len` over lists is approx. 2.5 times faster than looping o
 
 [![res][1]][1]
 
+The code used to produce the performance plot above can be found on the current repo [here](./perfplot_tester.py).
+
 
 
   [1]: https://i.stack.imgur.com/QZcyE.png
