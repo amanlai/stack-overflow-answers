@@ -1,6 +1,6 @@
-It's a post that was first posted as an answer to the following Stack Overflow question and can be found at https://stackoverflow.com/a/72299178/19123103
-
 ## How to create instance of multiple inherited class?
+
+<sup> It's a post that first appeared as an answer to a Stack Overflow question that can be found [here](https://stackoverflow.com/a/72299178/19123103).</sup>
 
 > I have this code:
 > ```python
@@ -35,7 +35,8 @@ It's a post that was first posted as an answer to the following Stack Overflow q
 > ```none
 > TypeError: __init__() missing 1 required positional argument: 'notes'
 > ```
-> Or what I am doing wrong here? Also, I have already tried `super()` in WorkingStudent class but it calls only the constructor of the first passed class. i.e in this case `Student`.
+> Or what I am doing wrong here?
+
 
 Instead of explicit classes, use `super()` to pass arguments along the mro:
 ```python
