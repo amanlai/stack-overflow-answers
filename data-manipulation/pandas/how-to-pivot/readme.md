@@ -1,7 +1,6 @@
-It's a post that was first posted as an answer to the following Stack Overflow question and can be found at https://stackoverflow.com/a/73060100/19123103
-
 ## How can I pivot a dataframe?
 
+<sup>It's a post that first appeared as an answer to a Stack Overflow question that can be found [here](https://stackoverflow.com/a/73060100/19123103).</sup>
 
 #### Call `reset_index()` (along with `add_suffix()`)
 
