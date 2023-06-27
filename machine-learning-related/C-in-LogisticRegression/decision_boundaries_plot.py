@@ -29,6 +29,6 @@ def plot_class_regions(clf, transformer, X, y, ax=None):
     ax.contourf(x2, y2, preds, cmap=cmap_light, alpha=0.8)
     # scatter plot
     ax.scatter(X[:, 0], X[:, 1], c=y_train, cmap=cmap_bold, s=50, edgecolor='black')
-    ax.set(xlim=(x_min-0.5, x_max+0.5), ylim=(y_min-0.5, y_max+0.5))
+    ax.set(xlim=(x_min, x_max), ylim=(y_min, y_max))
     
     return ax
