@@ -1,6 +1,6 @@
-It's a post that was first posted as an answer to the following Stack Overflow question and can be found at https://stackoverflow.com/a/75729269/19123103
-
 ## Why do I get ValueError: Cannot set non-string value '0' into a StringArray.?
+
+<sup> It's a post that was first posted as an answer to a Stack Overflow question that can be found [here](https://stackoverflow.com/a/75729269/19123103). </sup>
 
 > I'm using pandas to read in two datasets and reassign the `value` column of each. One dataset is a csv, loaded with `pd.read_csv()`, and the other is xlsx, loaded with `Workbook.sheets()` from the sxl library. 
 > 
@@ -19,11 +19,6 @@ It's a post that was first posted as an answer to the following Stack Overflow q
 > ValueError: Cannot set non-string value 'True' into a StringArray
 > ``` 
 > when I try to reassign a string type column to True/False. There's no error when I run the same line on the value column of the data from the excel document.
-> 
-> I can fix the error for myself by casting the value before reassignment with `.astype('object')`, and I'm unsure why this works -- `value` in both dataframes is string type.
-> 
-> My colleague doesn't get the error, so that band-aid may not be necessary. I'm running Python 3.9.4, pandas version 1.5.3, and numpy version 1.22.0.
-
 
 Long story short, the dtype of `"value"` column is `'string'`, which is an [extension dtype for string data][1] that is also nullable. That means the values in this column can be either a string or NaN. When you try to replace values in this column into integers (`"A" -> 0` and `"B" -> 1`), that's raising the error because, well, the values in this column cannot be integers.
 
