@@ -1,6 +1,6 @@
 ## How to fit a curve to data using python
 
-<sup> It's a post that was first posted as an answer to a Stack Overflow question that can be found at [here](https://stackoverflow.com/a/75598551/19123103). </sup>
+<sup> It's a post that was first posted as an answer to a Stack Overflow question that can be found at [here](https://stackoverflow.com/a/75598551/19123103) and [here](https://stackoverflow.com/q/50371428/19123103). </sup>
 
 
 
@@ -54,6 +54,67 @@ mse_poly3d = mse(poly3d, x, y, coefs_poly3d)
 
 N.B. This post is only about fitting a function to an existing data. No attempts were made to build predictive models (in which case, how the function fares depends on how it performs on unseen data and both functions here are probably very overfit).
 
+
+---
+
+##### [How to fit a step function](https://stackoverflow.com/q/50371428/19123103)
+
+[![function definition][4]][4]
+
+
+This function as is will raise OptimizeWarning because it uses `start` and `end` as cutoff points. However, if re-written to make it not explicitly depend on `start` and `end` as cutoff points, `curve_fit` will work. For example, `if x < start, then -1` can be written as `np.sign(x - start)`. Then it becomes a matter of writing a separate definition for each condition of the function and adding them up into a single function.
+
+```python
+def f(x, start, end):
+    left_tail = np.sign(x - start)
+    left_tail[left_tail > -1] = 0         # only -1s are needed from here
+    right_tail = np.sign(x - end)
+    right_tail[right_tail < 1] = 0        # only 1s are needed from here
+    rest = 1 / (end-start) * (x - start)
+    rest[(rest < 0) | (rest > 1)] = 0     # only the values between 0 and 1 are needed from here
+    return left_tail + rest + right_tail  # sum for a single value
+
+popt, pcov = curve_fit(f, xdata, ydata, p0=[495., 505.])
+```
+
+The above function can be written substantially more concisely using `np.clip()` (to limit the values in an array) which can replace the boolean indexing and replacing done above.
+
+```python
+import numpy as np
+from scipy.optimize import curve_fit
+import matplotlib.pyplot as plt
+
+def f(x, start, end):
+    left_tail = np.clip(np.sign(x - start), -1, 0)
+    rest = np.clip(1 / (end-start) * (x - start), 0, 1)
+    return left_tail + rest
+
+# sample data (as in the OP)
+xdata = np.linspace(0, 1000, 1000)
+ydata = np.r_[[-1.]*500, [1]*500]
+ydata += np.random.normal(0, 0.25, len(ydata))
+
+# fit function `f` to the data
+popt, pcov = curve_fit(f, xdata, ydata, p0=[495., 505.])
+print(popt, pcov)
+
+# plot data along with the fitted function
+plt.plot(xdata, ydata, 'b-', label='data')
+plt.plot(xdata, f(xdata, *popt), 'r-', label='fit')
+plt.legend();
+
+# [499.4995098  501.51244722] [[ 1.24195553 -0.25654186]
+#  [-0.25654186  0.2538896 ]]
+```
+
+Then we get coefficients (499.499, 501.51) (that are pretty close to (500, 500)) and the plot looks like below.
+
+[![img][5]][5]
+
+
+
   [1]: https://stackoverflow.com/a/19165437/19123103
   [2]: https://stackoverflow.com/a/19165440/19123103
   [3]: https://i.stack.imgur.com/5lN2s.png
+  [4]: https://i.stack.imgur.com/22ZYx.gif
+  [5]: https://i.stack.imgur.com/h7Ccj.png
