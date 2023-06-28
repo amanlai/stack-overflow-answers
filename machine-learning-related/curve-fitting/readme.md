@@ -57,7 +57,7 @@ N.B. This post is only about fitting a function to an existing data. No attempts
 
 ---
 
-##### [How to fit a step function](https://stackoverflow.com/q/50371428/19123103)
+### [How to fit a step function](https://stackoverflow.com/q/50371428/19123103)
 
 [![function definition][4]][4]
 
