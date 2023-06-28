@@ -62,7 +62,7 @@ N.B. This post is only about fitting a function to an existing data. No attempts
 [![function definition][4]][4]
 
 
-This function as is will raise OptimizeWarning because it uses `start` and `end` as cutoff points. However, if re-written to make it not explicitly depend on `start` and `end` as cutoff points, `curve_fit` will work. For example, `if x < start, then -1` can be written as `np.sign(x - start)`. Then it becomes a matter of writing a separate definition for each condition of the function and adding them up into a single function.
+This function as is will raise OptimizeWarning because it uses `start` and `end` as cutoff points. However, if re-written to make it not explicitly depend on `start` and `end` as cutoff points, `curve_fit` will work. For example, `if x < start, then -1` can be written by shifting `x` by `start`, checking its sign, i.e. `np.sign(x - start)`. Then it becomes a matter of writing a separate definition for each condition of the function and adding them up into a single function.
 
 ```python
 def f(x, start, end):
