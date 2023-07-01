@@ -1,6 +1,7 @@
-This post was first used to answer [this](https://stackoverflow.com/q/32554527/19123103) Stack Overflow question.
-
 ## How to solve `TypeError: list indices must be integers or slices, not str`?
+
+<sup> This post was first used to answer [this](https://stackoverflow.com/q/32554527/19123103) Stack Overflow question. </sup>
+
 
 As the message says, this error occurs when a string is used to index a list. _Most_ of the cases leading to this error can be summarized in the following cases.
 
