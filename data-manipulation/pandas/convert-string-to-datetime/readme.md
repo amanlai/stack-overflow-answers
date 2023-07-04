@@ -1,6 +1,20 @@
 ## Convert Pandas Column to DateTime
 
-<sup> This is based on my answer to a Stack Overflow question that can be found [here](https://stackoverflow.com/q/26763344/19123103) </sup>
+<sup> This is based on my answers to Stack Overflow questions that can be found [here](https://stackoverflow.com/q/26763344/19123103) and [here](https://stackoverflow.com/a/75253473/19123103). </sup>
+
+#### Multiple datetime columns
+
+If you want to convert multiple string columns to datetime, then using `apply()` would be useful.
+```python
+df[['date1', 'date2']] = df[['date1', 'date2']].apply(pd.to_datetime)
+```
+You can pass parameters to `to_datetime` as kwargs.
+```python
+df[['start_date', 'end_date']] = df[['start_date', 'end_date']].apply(pd.to_datetime, format="%m/%d/%Y")
+```
+
+Passing to `apply`, without specifying `axis`, still converts values vectorially *for each column*. `apply` is needed here because `pd.to_datetime` can only be called on a single column. If it has to be called on multiple columns, the options are either use an explicit `for-loop`, or pass it to `apply`. On the other hand, if you call `pd.to_datetime` using `apply` on a column (e.g. `df['date'].apply(pd.to_datetime))`, that would not be vectorized, and should be avoided.
+
 
 #### `errors='coerce'` is useful
 
@@ -16,7 +30,11 @@ df[['start', 'end']] = df[['start', 'end']].apply(
 
 #### Setting the correct `format=` is much faster than letting pandas find out<sup>1</sup>
 
-Long story short, passing the correct `format=` from the beginning as in [chrisb's post](https://stackoverflow.com/a/26763793/19123103) is much faster than letting pandas figure out the format, especially if the format contains **time** component. The runtime difference for dataframes greater than 10k rows is huge (~25 times faster, so we're talking like a couple minutes vs a few seconds). All valid format options can be found at https://strftime.org/.
+If the column contains a **time** component and you know the format of the datetime/time, then passing the format explicitly would significantly speed up the conversion. There's barely any difference if the column is only date, though. In my project, for a column with 5 millions rows, the difference was huge: ~2.5 min vs 6s. 
+
+It turns out explicitly specifying the format is about 25x faster. The following runtime plot shows that there's a huge gap in performance depending on whether you passed format or not. 
+
+All valid format options can be found at https://strftime.org/.
 
 [![perfplot][1]][1]
 
