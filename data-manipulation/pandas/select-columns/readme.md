@@ -1,6 +1,8 @@
 ## Selecting columns from a dataframe via a list of column names
 
-<sup> It's a post that was first posted as an answer to a Stack Overflow question that can be found [here](https://stackoverflow.com/a/75901708/19123103). </sup>
+<sup> This repo is based on my answers to Stack Overflow questions that can be found [here](https://stackoverflow.com/a/75901708/19123103) and [here](https://stackoverflow.com/a/75974729/19123103). </sup>
+
+
 
 
 #### 1. `[]` aka `__getitem__()`
@@ -40,4 +42,34 @@ As can be seen from the output below, `f` in `cols` is ignored because it doesn'
 [![res][1]][1]
 
 
+To select columns by index, `take()` could be used.
+```python
+# select the first and third columns
+df1 = df.take([0,2], axis=1)
+```
+Since this creates a copy by default, you won't get the pesky `SettingWithCopyWarning` with this.
+
+---
+
+Also `xs()` could be used to select columns by label (must pass Series/array/Index).
+```python
+# select columns A and B
+df1 = df.xs(pd.Index(['A', 'B']), axis=1)
+```
+[![res1][2]][2]
+
+The most useful aspect of `xs` is that it could be used to select MultiIndex columns by level.
+```python
+df2 = df.xs('col1', level=1, axis=1)
+
+# can select specific columns as well
+df3 = df.xs(pd.MultiIndex.from_tuples([('A', 'col1'), ('B', 'col2')]), axis=1)
+```
+[![res2][3]][3]
+
+
+
+
   [1]: https://i.stack.imgur.com/8NGFh.png
+  [2]: https://i.stack.imgur.com/vRMeO.png
+  [3]: https://i.stack.imgur.com/TLU13.png
