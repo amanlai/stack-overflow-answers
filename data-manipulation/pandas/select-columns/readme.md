@@ -1,4 +1,4 @@
-## Selecting columns from a dataframe via a list of column names
+## Selecting columns from a dataframe
 
 <sup> This repo is based on my answers to Stack Overflow questions that can be found [here](https://stackoverflow.com/a/75901708/19123103) and [here](https://stackoverflow.com/a/75974729/19123103). </sup>
 
@@ -42,16 +42,22 @@ As can be seen from the output below, `f` in `cols` is ignored because it doesn'
 [![res][1]][1]
 
 
-To select columns by index, `take()` could be used.
+#### 4. `take()`
+
+Yet another way is to select columns by index, in which case, `take()` could be used.
+
 ```python
 # select the first and third columns
 df1 = df.take([0,2], axis=1)
 ```
 Since this creates a copy by default, you won't get the pesky `SettingWithCopyWarning` with this.
 
----
 
-Also `xs()` could be used to select columns by label (must pass Series/array/Index).
+
+#### 5. `xs()`
+
+Yet another method to select columns by label is via `xs()`. Note however that Series/array/Index must be passed (a bare list will not work).
+
 ```python
 # select columns A and B
 df1 = df.xs(pd.Index(['A', 'B']), axis=1)
