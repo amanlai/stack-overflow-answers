@@ -112,6 +112,60 @@ Then we get coefficients (499.499, 501.51) (that are pretty close to (500, 500))
 [![img][5]][5]
 
 
+### What is `curve_fit()` anyway?
+
+#### How to solve `OptimizeWarning` it sometimes throws?
+
+For unbounded optimization problems, `curve_fit` uses `leastsq` which is a Python wrapper for the Fortran `minpack` library, specifically the `lmdif` routine which is an implementation of the Levenberg-Marquardt algorithm. Consider the following `curve_fit()` call that fits function `func` to the the data given by `x` and `y`.
+```python
+import numpy as np
+from scipy import optimize, linalg
+
+def func(xs, *params):
+    return np.array(params) @ xs
+
+x = np.random.default_rng(0).normal(0,1, size=10)
+y = x.copy()
+x = np.array([x, x, x, x])
+y = x.sum(axis=0)
+res = optimize.curve_fit(func, x, y, p0=[1]*len(x), full_output=1)
+```
+This is equivalent to a `leastsq()` call that looks like the following. Note that `func` needs to be wrapped in another function that doesn't explicitly use `x` and `y`, in order to use `leastsq()`.
+
+```python
+def wrap_func(func, xdata, ydata):
+    def func_wrapped(params, *args):
+        return func(xdata, *params) - ydata
+    return func_wrapped
+
+f = wrap_func(func, x, y)
+res = optimize.leastsq(f, [1]*len(x), full_output=1)
+```
+
+This in turn is equivalent to calling the Fortran `lmdif` routine directly.
+
+```python
+retval = optimize._minpack._lmdif(f, [1]*len(x), ((),), 1)
+```
+In fact, under the hood, this is the precise call that is made to fit the curve. Then the covariance matrix is computed using the following bit of code.
+
+```python
+info = retval[-1]
+perm = retval[1]['ipvt'] - 1
+n = len(perm)
+r = np.triu(retval[1]['fjac'].T[:n, :])
+inv_triu = linalg.get_lapack_funcs('trtri', (r,))
+invR, trtri_info = inv_triu(r)
+print(trtri_info, end='\n\n')
+
+invR[perm] = invR.copy()
+cov_x = invR @ invR.T
+print(cov_x)
+```
+As it's evident from the code above, the upper triangle of estimation of the Jacobian matrix (`r`) is inverted using `inv_triu()`, permuted using the `perm` array and its norm is the covariance matrix `cov_x`. In other words, the estimation of the Jacobian matrix have to invertible, which implies that  it cannot be singular.
+
+
+
 
   [1]: https://stackoverflow.com/a/19165437/19123103
   [2]: https://stackoverflow.com/a/19165440/19123103
