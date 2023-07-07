@@ -39,3 +39,27 @@ mse_sine = mse(sine, x, y, coefs_sine)
 mse_poly3d = mse(poly3d, x, y, coefs_poly3d)
 
 print(mse_sine, mse_poly3d)
+
+
+###############################################
+
+
+# sample data
+x = np.linspace(0, 10)
+y = x + np.random.default_rng(0).normal(0, 1, 50)
+f = lambda x,a,b: np.exp(-a*x)+b
+
+# `curve_fit` call
+popt, pcov = curve_fit(f, x, y, p0=[1, 1])   # incorrect cov
+print(pcov)
+
+# `curve_fit` call with educated first guess
+popt, pcov = curve_fit(f, x, y, p0=[-1,1])   # fine fit
+print(pcov)
+
+# [[1.99102540e-05 6.25250542e-04]
+#  [6.25250542e-04 4.22266381e-02]]
+
+plt.plot(x, y, label='data')
+plt.plot(x, f(x, *popt), label='fit')
+plt.legend();
