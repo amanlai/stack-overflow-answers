@@ -114,8 +114,6 @@ Then we get coefficients (499.499, 501.51) (that are pretty close to (500, 500))
 
 ### What is `curve_fit()` anyway?
 
-#### How to solve `OptimizeWarning` it sometimes throws?
-
 For unbounded optimization problems, `curve_fit` uses `leastsq` which is a Python wrapper for the Fortran `minpack` library, specifically the `lmdif` routine which is an implementation of the Levenberg-Marquardt algorithm. Consider the following `curve_fit()` call that fits function `func` to the the data given by `x` and `y`.
 ```python
 import numpy as np
@@ -165,6 +163,52 @@ print(cov_x)
 As it's evident from the code above, the upper triangle of estimation of the Jacobian matrix (`r`) is inverted using `inv_triu()`, permuted using the `perm` array and its norm is the covariance matrix `cov_x`. In other words, the estimation of the Jacobian matrix have to invertible, which implies that  it cannot be singular.
 
 
+#### How to solve `OptimizeWarning` it sometimes throws?
+
+##### Tune initial guess `p0`
+
+Depending on the function that is being fit, it is sometimes important to feed an educated initial guess. For example, suppose we have `x` and `y` and try to fit `f` to it with an initial guess of `[1, 1]` for the parameters. However, the exponential function behaves very differently depending on the sign of the power, so it's important to start at the correct sign, which the initial guess of `[1, 1]` doesn't do a good job of. So the covariance is not estimated correctly.<sup>1</sup>
+
+```python
+import numpy as np
+from scipy.optimize import curve_fit
+import matplotlib.pyplot as plt
+
+# sample data
+x = np.linspace(0, 10)
+y = x + np.random.default_rng(0).normal(0, 1, 50)
+f = lambda x,a,b: np.exp(-a*x)+b
+
+# `curve_fit` call
+popt, pcov = curve_fit(f, x, y, p0=[1, 1])   # incorrect cov
+print(pcov)
+
+# [[inf inf]
+#  [inf inf]]
+```
+
+If we make an educated initial guess, it works fine.
+
+```python
+popt, pcov = curve_fit(f, x, y, p0=[-1,1])   # fine fit
+print(pcov)
+
+# [[1.99102540e-05 6.25250542e-04]
+#  [6.25250542e-04 4.22266381e-02]]
+
+plt.plot(x, y, label='data')
+plt.plot(x, f(x, *popt), label='fit')
+plt.legend();
+```
+[![case1][6]][6]
+
+
+
+
+---
+
+<sup>1</sup> The reason is that the Jacobian matrix doesn't have full rank, i.e., its determinant is zero, so there is no inverse and the covariance matrix is ill-defined.
+
 
 
   [1]: https://stackoverflow.com/a/19165437/19123103
@@ -172,3 +216,5 @@ As it's evident from the code above, the upper triangle of estimation of the Jac
   [3]: https://i.stack.imgur.com/5lN2s.png
   [4]: https://i.stack.imgur.com/22ZYx.gif
   [5]: https://i.stack.imgur.com/h7Ccj.png
+  [6]: https://i.stack.imgur.com/mn5vt.png
+
