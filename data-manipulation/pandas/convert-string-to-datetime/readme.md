@@ -42,6 +42,18 @@ All valid format options can be found at https://strftime.org/.
 
 #### Convert a column of mixed format strings to a datetime
 
+How to convert to datetime in the following case:
+```python
+df = pd.DataFrame({
+    'Date': [
+        '12/07/2013 21:50:00',
+        '13/07/2013 00:30:00',
+        '15/07/2013',
+        '11/07/2013'
+    ]
+})
+```
+
 If we look at the [source code](https://github.com/pandas-dev/pandas/blob/0b04174115d156541552da07e2c220df613ae36f/pandas/core/tools/datetimes.py#L445-L449), if you pass `format=` and `dayfirst=` arguments, `dayfirst=` will never be read because passing `format=` calls a C function (np_datetime_strings.c) that doesn't use `dayfirst=` to make conversions. On the other hand, if you pass only `dayfirst=`, it will be used to first guess the format and falls back on `dateutil.parser.parse` to make conversions. So, use only one of them.
 
 In most cases, 
@@ -51,7 +63,7 @@ df['Date'] = pd.to_datetime(df['Date'])
 ```
 does the job.
 
-In the specific example in the OP, passing `dayfirst=True` does the job.
+In the specific example, passing `dayfirst=True` does the job.
 ```python
 df['Date'] = pd.to_datetime(df['Date'], dayfirst=True)
 ```
