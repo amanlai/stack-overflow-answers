@@ -40,7 +40,32 @@ All valid format options can be found at https://strftime.org/.
 
 <sup>1</sup> Code used to produce the timeit test plot may be found on this repo [here](./perfplot_code.py)
 
-If the column contains multiple formats, see [Convert a column of mixed format strings to a datetime Dtype][2].
+#### Convert a column of mixed format strings to a datetime
+
+If we look at the [source code](https://github.com/pandas-dev/pandas/blob/0b04174115d156541552da07e2c220df613ae36f/pandas/core/tools/datetimes.py#L445-L449), if you pass `format=` and `dayfirst=` arguments, `dayfirst=` will never be read because passing `format=` calls a C function (np_datetime_strings.c) that doesn't use `dayfirst=` to make conversions. On the other hand, if you pass only `dayfirst=`, it will be used to first guess the format and falls back on `dateutil.parser.parse` to make conversions. So, use only one of them.
+
+In most cases, 
+
+```python
+df['Date'] = pd.to_datetime(df['Date'])
+```
+does the job.
+
+In the specific example in the OP, passing `dayfirst=True` does the job.
+```python
+df['Date'] = pd.to_datetime(df['Date'], dayfirst=True)
+```
+
+That said, as elaborated above, passing the `format=` makes the conversion run ~25x faster, so it's probably better to pass the `format=`. Now since the format is mixed, one way is to perform the conversion in two steps (`errors='coerce'` argument will be useful) 
+
+- convert the datetimes with time component 
+- fill in the NaT values (the "coerced" rows) by a Series converted with a different format.
+```python
+df['Date'] = pd.to_datetime(df['Date'], format='%d/%m/%Y %H:%M:%S', errors='coerce')
+df['Date'] = df['Date'].fillna(pd.to_datetime(df['Date'], format='%d/%m/%Y', errors='coerce'))
+```
+This method (of performing or more conversions) can be used to convert any column with "weirdly" formatted datetimes.
+
 
 
   [1]: https://i.stack.imgur.com/Qx5cy.png
