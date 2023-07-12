@@ -146,49 +146,10 @@ If you want to filter using both (or multiple) columns, there's `any()` and `all
 
 ---
 
-<sup>1</sup> Benchmark code using a frame with 80k rows 
-```python
-import numpy as np
-df = pd.DataFrame({'A': 'foo bar foo baz foo bar foo foo'.split()*10000, 
-                   'B': np.random.rand(80000)})
+<sup>1</sup> Benchmark code using a frame with 80k rows can be found on [this repo][7].
 
-%timeit df[df.A == 'foo']
-# 8.5 ms ± 104.5 µs per loop (mean ± std. dev. of 7 runs, 100 loops each)
-%timeit df.query("A == 'foo'")
-# 6.36 ms ± 95.7 µs per loop (mean ± std. dev. of 7 runs, 100 loops each)
+<sup>2</sup> Benchmark code using a frame with 800k rows can be found on [this repo][6].
 
-%timeit df[((df.A == 'foo') & (df.A != 'bar')) | ((df.A != 'baz') & (df.A != 'buz'))]
-# 29 ms ± 554 µs per loop (mean ± std. dev. of 10 runs, 100 loops each)
-%timeit df.query("A == 'foo' & A != 'bar' | A != 'baz' & A != 'buz'")
-# 16 ms ± 339 µs per loop (mean ± std. dev. of 10 runs, 100 loops each)
-
-%timeit df[(df.B % 5) **2 < 0.1]
-# 5.35 ms ± 37.6 µs per loop (mean ± std. dev. of 7 runs, 100 loops each)
-%timeit df.query("(B % 5) **2 < 0.1")
-# 4.37 ms ± 46.3 µs per loop (mean ± std. dev. of 7 runs, 100 loops each)
-```
-
-<sup>2</sup> Benchmark code using a frame with 800k rows 
-
-```python
-df = pd.DataFrame({'A': 'foo bar foo baz foo bar foo foo'.split()*100000, 
-                   'B': np.random.rand(800000)})
-
-%timeit df[df.A == 'foo']
-# 87.9 ms ± 873 µs per loop (mean ± std. dev. of 10 runs, 100 loops each)
-%timeit df.query("A == 'foo'")
-# 54.4 ms ± 726 µs per loop (mean ± std. dev. of 10 runs, 100 loops each)
-
-%timeit df[((df.A == 'foo') & (df.A != 'bar')) | ((df.A != 'baz') & (df.A != 'buz'))]
-# 310 ms ± 3.4 ms per loop (mean ± std. dev. of 10 runs, 100 loops each)
-%timeit df.query("A == 'foo' & A != 'bar' | A != 'baz' & A != 'buz'")
-# 132 ms ± 2.43 ms per loop (mean ± std. dev. of 10 runs, 100 loops each)
-
-%timeit df[(df.B % 5) **2 < 0.1]
-# 54 ms ± 488 µs per loop (mean ± std. dev. of 10 runs, 100 loops each)
-%timeit df.query("(B % 5) **2 < 0.1")
-# 26.3 ms ± 320 µs per loop (mean ± std. dev. of 10 runs, 100 loops each)
-```
 <sup>3</sup>: Code used to produce the performance graphs of the two methods for strings and numbers can be found on [the current repo.][5]
 
 
@@ -199,3 +160,5 @@ df = pd.DataFrame({'A': 'foo bar foo baz foo bar foo foo'.split()*100000,
   [3]: https://i.stack.imgur.com/AgEhg.png
   [4]: https://stackoverflow.com/a/57338153/19123103
   [5]: ./perfplot_tester.py
+  [6]: ./timeit_tester_800k.py
+  [7]: ./timeit_tester_80k.py
