@@ -43,38 +43,28 @@ As mentioned earlier, `cdist()` is much faster than the numpy counterparts. The 
 
 ---
 
-#### 2. Scikit-learn's `euclidean_distances()` for sparse matrix data
+#### 2. Scikit-learn's `euclidean_distances()`
 
+Scikit-learn is a pretty big library so unless you're not using it for something else, it doesn't make much sense to import it only for Euclidean distance computation but for completeness, it also has `euclidean_distances()`, `paired_distances()` and `pairwise_distances()` methods that can be used to compute Euclidean distances. It has other convenient pairwise distance computation methods [worth checking out][3].
 
+One useful thing about scikit-learn's methods is that it can handle sparse matrices as is, whereas scipy/numpy will need to have sparse matrices converted into arrays to perform computation so depending on the size of the data, scikit-learn's methods may be the only function that runs.
+
+An example:
+
+```python
+from scipy import sparse
+from sklearn.metrics import pairwise
+
+A = sparse.random(1_000_000, 3)
+b = [(1, 2, 3), (4, 5, 6)]
+
+dsts = pairwise.euclidean_distances(A, b)
+```
 
 ---
 
-<sup>1</sup> The code used to produce the perfplot
-```python
-import numpy as np
-from scipy.spatial import distance
-import perfplot
-import matplotlib.pyplot as plt
-
-def sqrt_sum(arr):
-    return np.sqrt(np.sum((arr[:, None] - arr) ** 2, axis=-1))
-
-def linalg_norm(arr):
-    return np.linalg.norm(arr[:, None] - arr, axis=-1)
-
-def scipy_cdist(arr):
-    return distance.cdist(arr, arr)
-
-perfplot.plot(
-    setup=lambda n: np.random.rand(n, 3),
-    n_range=[2 ** k for k in range(14)],
-    kernels=[sqrt_sum, scipy_cdist, linalg_norm],
-    title="Euclidean distance between arrays of 3-D points",
-    xlabel="len(x), len(y)",
-    equality_check=np.allclose
-)
-plt.gcf().set_facecolor('white');
-```
+<sup>1</sup> The code used to produce the perfplot may be found on this repo [here](./perfplot_code.py).
 
   [1]: https://stackoverflow.com/a/47775357/19123103
   [2]: https://i.stack.imgur.com/iOoq5.png
+  [3]: https://scikit-learn.org/stable/modules/classes.html#module-sklearn.metrics.pairwise
