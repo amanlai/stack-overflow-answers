@@ -141,16 +141,13 @@ If you want to filter using both (or multiple) columns, there's `any()` and `all
    ```
 
 
-
-<br>
-
 ---
 
-<sup>1</sup> Benchmark code using a frame with 80k rows can be found on [this repo][7].
+<sup>1</sup> Benchmark code using a frame with 80k rows can be found on the current repo [here][7].
 
-<sup>2</sup> Benchmark code using a frame with 800k rows can be found on [this repo][6].
+<sup>2</sup> Benchmark code using a frame with 800k rows can be found on the current repo [here][6].
 
-<sup>3</sup>: Code used to produce the performance graphs of the two methods for strings and numbers can be found on [the current repo.][5]
+<sup>3</sup>: Code used to produce the performance graphs of the two methods for strings and numbers can be found on the current repo [here][5].
 
 
 
