@@ -1,3 +1,21 @@
+## How to compute the Euclidean distance?
+
+<sup>This post is based on my answer to a Stack Overflow question that may be found [here](https://stackoverflow.com/q/1401712/19123103).</sup>
+
+First off, if the desire is to find the Euclidean distance between only two points, then scipy's `euclidean()` is the simplest.
+```python
+from scipy.spatial import distance
+a, b = (1, 2, 3), (4, 5, 6)
+x = distance.euclidean(a, b)
+```
+Yet another way is `numpy.linalg.norm` or even a straightforward computation coding its formula using vectorized numpy methods.
+```python
+y = np.linalg.norm(np.array(a) - b)
+z = np.sqrt(np.sum((np.array(a) - b)**2))
+```
+
+---
+
 #### 1. SciPy's vectorized `cdist()` for Euclidean distance matrix
 
 [@Nico Schlömer][1]'s benchmarks show scipy's `euclidean()` function to be much slower than its numpy counterparts. The reason is that it's meant to work on a pair of points, not an array of points; thus not vectorized. Also, his benchmark uses code to find the Euclidean distances between arrays of equal length. 
