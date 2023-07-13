@@ -91,3 +91,11 @@ df6 = df[df[['A','B']].isin(list_of_values).all(1)]
 print(df6)
 df6 = df.query("A in @list_of_values and B in @list_of_values")
 print(df6)
+
+
+#####################################################
+
+
+df = pd.DataFrame({'A' : ['hi', 'hello', 'day', np.nan], 'B' : [1, 2, 3, 4]})
+x = df.query('A.str.len() != 3')
+print(x)
