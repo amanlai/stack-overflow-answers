@@ -1,6 +1,6 @@
 ## Select rows from a DataFrame
 
-<sup>This post is based on my answers to Stack Overflow questions that may be found [here](https://stackoverflow.com/a/73762002/19123103), [here](https://stackoverflow.com/a/72842272/19123103) and [here](https://stackoverflow.com/a/72862831/19123103). </sup>
+<sup>This post is based on my answers to Stack Overflow questions that may be found [here](https://stackoverflow.com/a/73762002/19123103), [here](https://stackoverflow.com/a/72842272/19123103), [here](https://stackoverflow.com/a/72862831/19123103) and [here](https://stackoverflow.com/a/72873572/19123103). </sup>
 
 ### 1. Use f-strings inside `query()` calls
 
@@ -141,12 +141,33 @@ If you want to filter using both (or multiple) columns, there's `any()` and `all
    ```
 
 
-### 5. Using vectorized methods in `query()`
+### 5. Filter string data based on its string length
+
+For string operations such as this, vanilla Python using built-in methods (without lambda) is much faster than `apply()` or `str.len()`. 
+
+Building a boolean mask by mapping `len` to each string inside a list comprehension is approx. 40-70% faster than `apply()` and `str.len()` respectively. 
+
+For multiple columns, `zip()` allows to evaluate values from different columns concurrently.
+```python
+df = pd.DataFrame({'A' : ['hi', 'hello', 'day'], 'B' : [1, 2, 3]})
+col_A_len = map(len, df['A'])
+col_B_len = map(len, df['B'])
+m = [a==3 and b==3 for a,b in zip(col_A_len, col_B_len)]
+df1 = df[m]
+```
+For a single column, drop `zip()` and loop over the column and check if the length is equal to 3:
+```python
+df2 = df[[a==3 for a in map(len, df['A'])]]
+```
+This code can be written a little concisely using the `Series.map()` method (but a little slower than list comprehension due to pandas overhead):
+```python
+df2 = df[df['A'].map(len)==3]
+```
 
 `query()` works with `str.` methods as well. For example, to select rows from a dataframe by string length the following may be used.
 
+
 ```python
-df = pd.DataFrame({'A' : ['hi', 'hello', 'day', np.nan], 'B' : [1, 2, 3, 4]})
 df.query('A.str.len() != 3')
 ```
 

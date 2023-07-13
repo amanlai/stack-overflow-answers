@@ -96,6 +96,18 @@ print(df6)
 #####################################################
 
 
-df = pd.DataFrame({'A' : ['hi', 'hello', 'day', np.nan], 'B' : [1, 2, 3, 4]})
+df = pd.DataFrame({'A' : ['hi', 'hello', 'day'], 'B' : [1, 2, 3]})
+
+col_A_len = map(len, df['A'])
+col_B_len = map(len, df['B'])
+m = [a==3 and b==3 for a,b in zip(col_A_len, col_B_len)]
+x = df[m]
+print(x)
+
+x = df[[a==3 for a in map(len, df['A'])]]
+print(x)
+x = df[df['A'].map(len)==3]
+print(x)
+
 x = df.query('A.str.len() != 3')
 print(x)
