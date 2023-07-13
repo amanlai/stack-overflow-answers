@@ -1,6 +1,6 @@
-## How to select rows from a DataFrame
+## Select rows from a DataFrame
 
-<sup>This post is based on my answers to Stack Overflow questions that may be found [here](https://stackoverflow.com/a/73762002/19123103) and [here](https://stackoverflow.com/a/72842272/19123103). </sup>
+<sup>This post is based on my answers to Stack Overflow questions that may be found [here](https://stackoverflow.com/a/73762002/19123103), [here](https://stackoverflow.com/a/72842272/19123103) and [here](https://stackoverflow.com/a/72862831/19123103). </sup>
 
 ### 1. Use f-strings inside `query()` calls
 
@@ -140,6 +140,15 @@ If you want to filter using both (or multiple) columns, there's `any()` and `all
    df.query("A in @list_of_values and B in @list_of_values")
    ```
 
+
+### 5. Using vectorized methods in `query()`
+
+`query()` works with `str.` methods as well. For example, to select rows from a dataframe by string length the following may be used.
+
+```python
+df = pd.DataFrame({'A' : ['hi', 'hello', 'day', np.nan], 'B' : [1, 2, 3, 4]})
+df.query('A.str.len() != 3')
+```
 
 ---
 
