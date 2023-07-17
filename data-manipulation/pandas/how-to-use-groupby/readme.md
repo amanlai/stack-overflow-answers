@@ -1,6 +1,6 @@
 ## How to use group-by to get group sum
 
-<sup> This post is based on my answers to Stack Overflow questions that may be found [here](https://stackoverflow.com/a/72905344/19123103) and [here](https://stackoverflow.com/a/72916928/19123103). </sup>
+<sup> This post is based on my answers to Stack Overflow questions that may be found at [1](https://stackoverflow.com/a/72905344/19123103), [2](https://stackoverflow.com/a/72916928/19123103) and [3](https://stackoverflow.com/a/72918043/19123103). </sup>
 
 The canonical way is as follows.
 ```python
@@ -72,6 +72,31 @@ dct = dict(ChainMap(*reversed([{f'{k}_total': (k, 'sum'), f'{k}_mean': (k, 'mean
 df.groupby('dummy', as_index=False).agg(**dct)
 ```
 [![flat][2]][2]
+
+---
+
+#### Exclude certain columns
+
+`df.groupby('dummy').sum()` sums values in all columns other than `dummy`. How to group-sum values in _some_ of the columns? That may be done by selecting the desired columns on the groupby object.
+```python
+df.groupby('dummy')[['A', 'B']].sum()
+```
+If you want to add a suffix/prefix to the aggregated column names, use `add_suffix()` / `add_prefix()`.
+```python
+df.groupby('dummy')[["A", "B"]].sum().add_suffix("_total")
+```
+
+---
+If you want to retain `dummy` as a column after aggregation, set `as_index=False` in `groupby()` or use `reset_index()`.
+```python
+df.groupby("dummy", as_index=False)[['A', 'B']].sum()
+
+# or
+df.groupby("dummy")[['A', 'B']].sum().reset_index()
+```
+
+
+
 
 
   [1]: https://i.stack.imgur.com/Nx5gv.png
