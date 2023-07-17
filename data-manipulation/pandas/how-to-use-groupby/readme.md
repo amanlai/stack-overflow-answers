@@ -1,6 +1,6 @@
 ## How to use group-by to get group sum
 
-<sup> This post is based on my answers to Stack Overflow questions that may be found at [1](https://stackoverflow.com/a/72905344/19123103), [2](https://stackoverflow.com/a/72916928/19123103) and [3](https://stackoverflow.com/a/72918043/19123103). </sup>
+<sup> This post is based on my answers to Stack Overflow questions that may be found at [1](https://stackoverflow.com/a/72905344/19123103), [2](https://stackoverflow.com/a/72916928/19123103), [3](https://stackoverflow.com/a/72918043/19123103), [4](https://stackoverflow.com/a/72919143/19123103). </sup>
 
 The canonical way is as follows.
 ```python
@@ -95,8 +95,34 @@ df.groupby("dummy", as_index=False)[['A', 'B']].sum()
 df.groupby("dummy")[['A', 'B']].sum().reset_index()
 ```
 
+#### Groupby in groupby
 
+How to make the following transformation where the average of group-specific averages are computed?
+```none
+cluster   org   time          cluster mean(time)
+     1      a      8                1         15 #=((8 + 6) / 2 + 23) / 2
+     1      a      6   -->          2         54 #=(74 + 34) / 2
+     2      h     34                3          6
+     1      c     23
+     2      d     74
+     3      w      6 
+```
 
+The easiest method is to call `groupby` twice; once to find group-specific mean values; then to compute the average of the averages.
+
+```python
+df.groupby(['cluster', 'org'], as_index=False).mean().groupby('cluster')['time'].mean()
+```
+
+Another possible solution is to reshape the dataframe using `pivot_table()` then take `mean()`. Note that it's necessary to pass `aggfunc='mean'` (this averages `time` by `cluster` and `org`).
+```python
+df.pivot_table(index='org', columns='cluster', values='time', aggfunc='mean').mean()
+```
+
+Another possibility is to use `level` parameter of `mean()` after the first `groupby()` to aggregate:
+```python
+df.groupby(['cluster', 'org']).mean().mean(level='cluster')
+```
 
 
   [1]: https://i.stack.imgur.com/Nx5gv.png
