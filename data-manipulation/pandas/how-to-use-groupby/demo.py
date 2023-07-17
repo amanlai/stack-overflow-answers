@@ -53,3 +53,18 @@ dct = {k:v for k in ['A','B','C'] for k,v in [(f'{k}_total', (k, 'sum')), (f'{k}
 # aggregation
 z2 = df.groupby('dummy', as_index=False).agg(**dct)
 print(z2)
+
+
+###########################################################################
+
+
+x = df.groupby('dummy')[['A', 'B']].sum()
+print(x)
+
+x = df.groupby('dummy')[["A", "B"]].sum().add_suffix("_total")
+print(x)
+
+x = df.groupby("dummy", as_index=False)[['A', 'B']].sum()
+print(x)
+
+
