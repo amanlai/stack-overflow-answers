@@ -1,4 +1,8 @@
 import pandas as pd
+import numpy as np
+
+df = DataFrame({'A' : [5, 6, 3, 4], 'B' : [1, 2, 3, 5]})
+
 
 col = 'A'
 x = df.query(f"{col} == 'foo'")
@@ -23,7 +27,6 @@ print(w)
 #####################################################
 
 
-df = DataFrame({'A' : [5,6,3,4], 'B' : [1,2,3, 5]})
 list_of_values = [3,6]
 
 df1 = df[df['A'].isin(list_of_values)]
@@ -111,3 +114,31 @@ print(x)
 
 x = df.query('A.str.len() != 3')
 print(x)
+
+
+#####################################################
+
+
+df = pd.DataFrame(np.random.default_rng(0).integers(1, 9, size=(10,3)), columns=['A', 'B', 'C'])
+
+m1 = df['B'] > 50
+m2 = df['C'] != 900
+m3 = df['C'].pow(2) > 1000
+m4 = df['B'].mul(4).between(50, 500)
+
+# filter rows where all of the conditions are True
+df[m1 & m2 & m3 & m4]
+
+# filter rows of column A where all of the conditions are True
+df.loc[m1 & m2 & m3 & m4, 'A']
+```
+or put the conditions in a list and reduce it via `bitwise_and` from `numpy` (wrapper for `&`).
+```python
+conditions = [
+    df['B'] > 50,
+    df['C'] != 900,
+    df['C'].pow(2) > 1000,
+    df['B'].mul(4).between(50, 500)
+]
+# filter rows of A where all of conditions are True
+df.loc[np.bitwise_and.reduce(conditions), 'A']
