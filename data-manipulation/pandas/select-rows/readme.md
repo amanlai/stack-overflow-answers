@@ -1,6 +1,6 @@
 ## Select rows from a DataFrame
 
-<sup>This post is based on my answers to Stack Overflow questions that may be found [here](https://stackoverflow.com/a/73762002/19123103), [here](https://stackoverflow.com/a/72842272/19123103), [here](https://stackoverflow.com/a/72862831/19123103) and [here](https://stackoverflow.com/a/72873572/19123103). </sup>
+<sup>This post is based on my answers to Stack Overflow questions that may be found at [1](https://stackoverflow.com/a/73762002/19123103), [2](https://stackoverflow.com/a/72842272/19123103), [3](https://stackoverflow.com/a/72862831/19123103), [4](https://stackoverflow.com/a/72873572/19123103) and [5](https://stackoverflow.com/a/73074165/19123103). </sup>
 
 ### 1. Use f-strings inside `query()` calls
 
@@ -169,6 +169,48 @@ df2 = df[df['A'].map(len)==3]
 
 ```python
 df.query('A.str.len() != 3')
+```
+
+
+### Select rows using a complex criteria
+
+If we want to select rows using multiple conditions such as: 
+
+> Select values from 'A' for which corresponding values for 'B' will be greater than 50, and for 'C' not equal to 900.
+
+In this case, as discussed above, creating a boolean mask and filtering is the canonical way.
+```python
+msk = (df["B"] > 50) & (df["C"] != 900)
+df1 = df[msk]
+```
+or using `query()`:
+```python
+df.query("B > 50 and C != 900")
+```
+
+It may be more readable to assign each condition to a variable, especially if there are a lot of them (maybe with descriptive names) and chain them together using bitwise operators such as (`&` or `|`). As a bonus, you don't need to worry about brackets `()` because each condition evaluates independently.
+```python
+m1 = df['B'] > 50
+m2 = df['C'] != 900
+m3 = df['C'].pow(2) > 1000
+m4 = df['B'].mul(4).between(50, 500)
+
+# filter rows where all of the conditions are True
+df[m1 & m2 & m3 & m4]
+
+# filter rows of column A where all of the conditions are True
+df.loc[m1 & m2 & m3 & m4, 'A']
+```
+or put the conditions in a list and reduce it via `bitwise_and` from `numpy` (wrapper for `&`).
+```python
+conditions = [
+    df['B'] > 50,
+    df['C'] != 900,
+    df['C'].pow(2) > 1000,
+    df['B'].mul(4).between(50, 500)
+]
+# filter rows of A where all of conditions are True
+df.loc[np.bitwise_and.reduce(conditions), 'A']
 ```
 
 ---
