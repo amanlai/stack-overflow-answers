@@ -1,21 +1,14 @@
 ## How can I pivot a dataframe?
 
-<sup>It's a post that first appeared as an answer to a Stack Overflow question that can be found [here](https://stackoverflow.com/a/73060100/19123103).</sup>
+<sup>This post is based on my answers to Stack Overflow questions that may be found at [1](https://stackoverflow.com/a/73060100/19123103), [2](https://stackoverflow.com/a/73330534/19123103).</sup>
 
-#### Call `reset_index()` (along with `add_suffix()`)
-
-Oftentimes, `reset_index()` is needed after you call `pivot_table` or `pivot`. For example, to make the following transformation (where one column _became_ column names)
-
-[![res][1]][1]
-
-you use the following code, where after `pivot`, you add prefix to the newly created column names and convert the index (in this case `"movies"`) back into a column and remove the name of the axis name:
+The canonical method to reshape a dataframe by pivoting it is `pivot()`.
 ```python
-df.pivot(*df).add_prefix('week_').reset_index().rename_axis(columns=None)
+df = pd.DataFrame({'A': range(9), 'B': ['a', 'b', 'c']*3, 'C': [*'XXXYYYZZZ']})
+agg_df = df.pivot(values='A', index='B', columns='C')
 ```
 
----
-
-As the other answers mentioned, "pivot" may refer to 2 different operations: 
+"Pivot" may refer to 2 different operations: 
 
 1. Unstacked aggregation (i.e. make the results of `groupby.agg` wider.)
 2. Reshaping (similar to pivot in Excel, `reshape` in numpy or `pivot_wider` in R)
@@ -140,6 +133,58 @@ You can also apply the previous insight to multi-column pivot operation as well.
   ```
 
 ---
+
+
+#### Call `reset_index()` (along with `add_suffix()`)
+
+Oftentimes, `reset_index()` is needed after you call `pivot_table` or `pivot`. For example, to make the following transformation (where one column _became_ column names)
+
+[![res][1]][1]
+
+you use the following code, where after `pivot`, you add prefix to the newly created column names and convert the index (in this case `"movies"`) back into a column and remove the name of the axis name:
+```python
+df.pivot(*df).add_prefix('week_').reset_index().rename_axis(columns=None)
+```
+
+
+#### Rename columns aftering pivoting
+
+`pivot_table` or `pivot` call sometimes create a MultiIndex that needs to be flattened. In that case, a further manipulation on the columns object fixes the issue.
+
+If some column names are not strings, you can `map` the column names to strings and `join` them.
+```python
+df = pd.DataFrame({
+    'c0': ['A','A','B','C'],
+    'c01': ['A','A1','B','C'],
+    'c02': ['b','b','d','c'],
+    'v1': [1, 3,4,5],
+    'v2': [1, 3,4,5]})
+
+df2 = pd.pivot_table(df, index=["c0"], columns=["c01","c02"], values=["v1","v2"]).reset_index()
+
+df2.columns = ['_'.join(map(str, c)).strip('_') for c in df2]
+```
+
+If you want to chain the renaming method to `pivot_table` method to put it in a pipeline, you can do so using `pipe` and `set_axis`. 
+
+Moreover, you can also reorder column levels using `reorder_levels`, e.g. `<c01 value>_<c02 value>_<v1>` instead of `<v1>_<c01 value>_<c02 value>`
+```python
+
+df2 = (
+    df.pivot_table(index=["c0"], columns=["c01","c02"], values=['1','2'])
+    .reorder_levels([1,2,0], axis=1)                # makes "v1","v2" the last level
+    .pipe(lambda x: x.set_axis(
+        map('_'.join, x)                            # if all column names are strings
+        #('_'.join(map(str, c)) for c in x)         # if some column names are not strings
+        , axis=1)
+         )                                          # rename columns
+    .reset_index()
+)
+```
+[![result][1]][1]
+
+
+  [1]: https://i.stack.imgur.com/JdCrw.png
 
 
 
