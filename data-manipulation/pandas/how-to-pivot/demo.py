@@ -101,3 +101,31 @@ data = pd.DataFrame({f'row_{i}': r for i, r in enumerate(indexes)} | {f'col_{i}'
                    )
 pv_5 = data.pivot_table('v', [k for k in data if k[:4]=='row_'], [k for k in data if k[:4]=='col_'], aggfuncs)
 ct_5.equals(pv_5) # True
+
+
+#######################################################
+
+
+df = pd.DataFrame({
+    'c0': ['A','A','B','C'],
+    'c01': ['A','A1','B','C'],
+    'c02': ['b','b','d','c'],
+    'v1': [1, 3,4,5],
+    'v2': [1, 3,4,5]})
+
+df2 = pd.pivot_table(df, index=["c0"], columns=["c01","c02"], values=["v1","v2"]).reset_index()
+
+df2.columns = ['_'.join(map(str, c)).strip('_') for c in df2]
+print(df)
+
+df2 = (
+    df.pivot_table(index=["c0"], columns=["c01","c02"], values=['1','2'])
+    .reorder_levels([1,2,0], axis=1)                # makes "v1","v2" the last level
+    .pipe(lambda x: x.set_axis(
+        map('_'.join, x)                            # if all column names are strings
+        #('_'.join(map(str, c)) for c in x)         # if some column names are not strings
+        , axis=1)
+         )                                          # rename columns
+    .reset_index()
+)
+print(df2)
