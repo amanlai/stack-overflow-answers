@@ -181,10 +181,9 @@ df2 = (
     .reset_index()
 )
 ```
-[![result][1]][1]
+[![result][5]][5]
 
 
-  [1]: https://i.stack.imgur.com/JdCrw.png
 
 
 
@@ -208,6 +207,7 @@ df2 = (
   [2]: https://i.stack.imgur.com/aCG37.png
   [3]: https://i.stack.imgur.com/uLNqo.png
   [4]: https://i.stack.imgur.com/j1CJI.png
+  [5]: https://i.stack.imgur.com/JdCrw.png
 
 
 
