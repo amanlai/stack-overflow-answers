@@ -169,7 +169,6 @@ If you want to chain the renaming method to `pivot_table` method to put it in a 
 
 Moreover, you can also reorder column levels using `reorder_levels`, e.g. `<c01 value>_<c02 value>_<v1>` instead of `<v1>_<c01 value>_<c02 value>`
 ```python
-
 df2 = (
     df.pivot_table(index=["c0"], columns=["c01","c02"], values=['1','2'])
     .reorder_levels([1,2,0], axis=1)                # makes "v1","v2" the last level
@@ -203,11 +202,6 @@ df2 = (
 </sup>
 
 
-  [1]: https://i.stack.imgur.com/SlCqF.png
-  [2]: https://i.stack.imgur.com/aCG37.png
-  [3]: https://i.stack.imgur.com/uLNqo.png
-  [4]: https://i.stack.imgur.com/j1CJI.png
-  [5]: https://i.stack.imgur.com/JdCrw.png
 
 
 
@@ -346,3 +340,10 @@ data = pd.DataFrame({f'row_{i}': r for i, r in enumerate(indexes)} | {f'col_{i}'
 pv_5 = data.pivot_table('v', [k for k in data if k[:4]=='row_'], [k for k in data if k[:4]=='col_'], aggfuncs)
 ct_5.equals(pv_5) # True
 ```
+
+
+  [1]: https://i.stack.imgur.com/SlCqF.png
+  [2]: https://i.stack.imgur.com/aCG37.png
+  [3]: https://i.stack.imgur.com/uLNqo.png
+  [4]: https://i.stack.imgur.com/j1CJI.png
+  [5]: https://i.stack.imgur.com/JdCrw.png
