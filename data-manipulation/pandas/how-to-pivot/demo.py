@@ -129,3 +129,21 @@ df2 = (
     .reset_index()
 )
 print(df2)
+
+
+#######################################################
+
+
+df = pd.DataFrame({'A':['x','y','z','x','y','z'],
+                 'B':['one','one','one','two','two','two'],
+                 'C':[2,18,2,8,2,18]})
+table = (
+    df
+    .pivot_table(index=['A', 'B'], aggfunc=np.sum, margins=True, margins_name='Total')
+    .assign(**{
+        # must exclude the last row (which are the Totals) for sum and group-specific sum
+        '% of Total': lambda x: x['C'] / x.iloc[:-1]['C'].sum() * 100,
+        '% of B': lambda x: x['C'] / x.iloc[:-1].groupby(level='A')['C'].transform('sum') * 100
+    })
+)
+print(table)
