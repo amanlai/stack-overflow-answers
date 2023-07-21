@@ -187,9 +187,11 @@ df2 = (
 
 If you want to add group-specific averages as new columns to a pivot table result, then that may be done using `groupby`.
 ```python
-df=pd.DataFrame({'A':['x','y','z','x','y','z'],
-                 'B':['one','one','one','two','two','two'],
-                 'C':[2,18,2,8,2,18]})
+df = pd.DataFrame({
+    'A': ['x', 'y', 'z', 'x', 'y', 'z'],
+    'B': ['one', 'one', 'one', 'two', 'two', 'two'],
+    'C': [2, 18, 2, 8, 2, 18]
+})
 table = pd.pivot_table(df, index=['A', 'B'], aggfunc='sum')
 
 table['% of Total'] = table['C'] / table['C'].sum() * 100
