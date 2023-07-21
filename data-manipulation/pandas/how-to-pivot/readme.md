@@ -1,6 +1,6 @@
 ## How can I pivot a dataframe?
 
-<sup>This post is based on my answers to Stack Overflow questions that may be found at [1](https://stackoverflow.com/a/73060100/19123103), [2](https://stackoverflow.com/a/73330534/19123103).</sup>
+<sup>This post is based on my answers to Stack Overflow questions that may be found at [1](https://stackoverflow.com/a/73060100/19123103), [2](https://stackoverflow.com/a/73330534/19123103), [3](https://stackoverflow.com/a/73341979/19123103).</sup>
 
 The canonical method to reshape a dataframe by pivoting it is `pivot()`.
 ```python
@@ -183,8 +183,42 @@ df2 = (
 [![result][5]][5]
 
 
+#### Attaching percentage computations
+
+If you want to add group-specific averages as new columns to a pivot table result, then that may be done using `groupby`.
+```python
+df=pd.DataFrame({'A':['x','y','z','x','y','z'],
+                 'B':['one','one','one','two','two','two'],
+                 'C':[2,18,2,8,2,18]})
+table = pd.pivot_table(df, index=['A', 'B'], aggfunc='sum')
+
+table['% of Total'] = table['C'] / table['C'].sum() * 100
+table['% of B'] = table['C'] / table.groupby(level=0)['C'].transform('sum') * 100
+```
+
+If you want to chain the methods to assign the new columns to `pivot_table()` method to put in a pipeline, you can do so using `assign()`.
+
+Moreover, you can add the totals as a new row using the `margins` parameter of `pivot_table`.
+```python
+table = (
+    df
+    .pivot_table(index=['A', 'B'], aggfunc=np.sum, margins=True, margins_name='Total')
+    .assign(**{
+        # must exclude the last row (which are the Totals) for sum and group-specific sum
+        '% of Total': lambda x: x['C'] / x.iloc[:-1]['C'].sum() * 100,
+        '% of B': lambda x: x['C'] / x.iloc[:-1].groupby(level='A')['C'].transform('sum') * 100
+    })
+)
+```
+[![result][6]][6]
+
+Note that for the particular example in the OP, as `pivot_table` method's `columns` parameter is not used, `pivot_table` is equivalent to `groupby` [as explained here](https://stackoverflow.com/questions/34702815/pandas-group-by-and-pivot-table-difference/72933069#72933069). So an equivalent (and possibly faster) approach to produce the initial pivot table result is
+```python
+table = df.groupby(['A','B']).sum()
+```
 
 
+---
 
 
 <sup>1</sup> `pivot_table()` aggregates the values and unstacks it. Specifically, it creates a single flat list out of index and columns, calls `groupby()` with this list as the grouper and aggregates using the passed aggregator methods (the default is `mean`). Then after aggregation, it calls `unstack()` by the list of columns. So internally, **pivot_table = groupby + unstack**. Moreover, if `fill_value` is passed, `fillna()` is called.
@@ -347,3 +381,4 @@ ct_5.equals(pv_5) # True
   [3]: https://i.stack.imgur.com/uLNqo.png
   [4]: https://i.stack.imgur.com/j1CJI.png
   [5]: https://i.stack.imgur.com/JdCrw.png
+  [6]: https://i.stack.imgur.com/o4R5u.png
