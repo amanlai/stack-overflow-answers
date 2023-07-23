@@ -2,7 +2,7 @@
 
 <sup>This post is based on my answer to a Stack Overflow question that may be found [here](https://stackoverflow.com/a/73443047/19123103).</sup>
 
-To solve this error, check the shape of the object you're trying to assign the df columns (using `np.shape`). The second (or the last) dimension must match the number of columns you're trying to assign to. For example, if you try to assign a 2-column numpy array to 3 columns, you'll see this error. 
+To cut to the chase, in order to solve this error, check the shape of the object you're trying to assign the df columns (using `np.shape`). The second (or the last) dimension must match the number of columns you're trying to assign to. For example, if you try to assign a 2-column numpy array to 3 columns, you'll see this error. 
 
 A general workaround (for **case 1** and **case 2** below) is to cast the object you're trying to assign to a DataFrame and `join()` it to `df`, i.e. instead of (1), use (2).
 ```python
