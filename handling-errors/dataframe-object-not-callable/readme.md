@@ -3,9 +3,20 @@
 <sup>This post is based on my answer to a Stack Overflow question that may be found [here](https://stackoverflow.com/a/73603754/19123103).</sup>
 
 
-This error occurs when you call a pandas DataFrame object - use round `()` brackets - as if it were a class or a function. Long story short, pandas DataFrames are objects of type 'DataFrame' whose attribute that makes an object callable is null.
+This error occurs when you call a pandas DataFrame object - use round `()` brackets - as if it were a class or a function. An example where this may appear is as follows.
+```python
+import pandas as pd
+import numpy as np
 
-For example, in the OP, the culprit is:
+credit_card = pd.read_csv("default_of_credit_card_clients_Data.csv", skiprows=1)
+    
+for col in credit_card:
+    var[col] = np.var(credit_card(col))
+```
+
+Long story short, pandas DataFrames are objects of type 'DataFrame' whose attribute that makes an object callable is null.
+
+For example, in the example above, the culprit is:
 ```python
 credit_card(col)
 ```
