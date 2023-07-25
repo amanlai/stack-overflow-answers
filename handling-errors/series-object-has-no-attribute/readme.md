@@ -11,7 +11,7 @@ df = pd.DataFrame(zip(*[range(10)]*2), columns=colNames)
 df['D'] = df.colNames[0] + df.colNames[1]                  # <----- error
 ```
 
-In the case above, they used `x.colNames[0]` to access the value on `colNames[0]` in row `x` but `df` doesn't have attribute `colNames`, so the error occurred.<sup>1</sup>
+In the case above, `df.colNames[0]` is used to access the value on `colNames[0]` in `df` but `df` doesn't have attribute `colNames`, so the error occurred.<sup>1</sup>
 
 Another case this error may occur is if an index had a white space in it that you didn't know about. For example, the following case reproduces this error.
 ```python
