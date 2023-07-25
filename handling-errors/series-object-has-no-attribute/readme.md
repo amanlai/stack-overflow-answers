@@ -4,7 +4,14 @@
 
 In general, this error occurs if you try to access an attribute that doesn't exist on an object. For pandas Serieses (or DataFrames), it occurs because you tried to index it using the [attribute access](https://pandas.pydata.org/docs/user_guide/indexing.html#attribute-access) (`.`).
 
-In the case in the OP, they used `x.colNames[0]` to access the value on `colNames[0]` in row `x` but `df` doesn't have attribute `colNames`, so the error occurred.<sup>1</sup>
+An example case is as follows.
+```python
+colNames = ['A', 'B']
+df = pd.DataFrame(zip(*[range(10)]*2), columns=colNames)
+df['D'] = df.colNames[0] + df.colNames[1]                  # <----- error
+```
+
+In the case above, they used `x.colNames[0]` to access the value on `colNames[0]` in row `x` but `df` doesn't have attribute `colNames`, so the error occurred.<sup>1</sup>
 
 Another case this error may occur is if an index had a white space in it that you didn't know about. For example, the following case reproduces this error.
 ```python
