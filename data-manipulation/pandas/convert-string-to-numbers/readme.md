@@ -1,6 +1,6 @@
-## Change column type in pandas
+## Convert strings to numbers in pandas
 
-<sup> It's a post that was first posted as an answer to the following Stack Overflow question, which may be found [here](https://stackoverflow.com/a/75505969/19123103). </sup>
+<sup> It's a post that was first posted as an answer to the following Stack Overflow question, which may be found at [1](https://stackoverflow.com/a/75505969/19123103) and [2](https://stackoverflow.com/a/73625937/19123103). </sup>
 
 > I created a DataFrame from a list of lists:
 > ```python
@@ -105,6 +105,14 @@ df = pd.concat([df, pd.DataFrame(np.random.rand(10000, 50).astype(str), columns=
 
 %timeit df.apply(pd.to_numeric)
 # 686 ms ± 45.8 ms per loop (mean ± std. dev. of 7 runs, 10 loops each)
+```
+
+##### 7. Remove characters from alphanumeric strings
+
+If you don't want to lose the values with letters in them, use `str.replace()` with a regex pattern to remove the non-digit characters.
+```python
+df = pd.DataFrame({'ID':['4806105017087','4806105017087','CN414149']})
+df['ID'] = df['ID'].str.replace('[^0-9]', '', regex=True).astype('int64')
 ```
 
 
