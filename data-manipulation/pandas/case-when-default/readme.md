@@ -6,6 +6,9 @@ If you need to create a new column in a pandas DataFrame conditional on values i
 
 Suppose we have the following dataframe,
 ```python
+import numpy as np
+import pandas as pd
+
 df = pd.DataFrame({'Time': range(0, 100, 20)})
 ```
 and we want to create another column `"Difficulty"` using the following logic:
@@ -16,7 +19,7 @@ ELSEIF 60 <  Time,       THEN 'Hard'
 ELSE 'Unknown'
 ```
 
-#### `numpy.select()`
+####  `numpy.select()`
 
 First method is to use `numpy.select()`.
 
@@ -47,6 +50,21 @@ df['difficulty'] = 'Unknown'
 df.loc[(df['Time']<30) & (df['Time']>0), 'difficulty'] = 'Easy'
 df.loc[(df['Time']>=30) & (df['Time']<=60), 'difficulty'] = 'Medium'
 df.loc[df['Time']>60, 'difficulty'] = 'Hard'
+```
+
+
+#### `numpy.where()`
+
+If we are assigning values using only an IF-ELSE condition (not multiple as above), numpy has a simpler method for it: `numpy.where()`. Its logic is very similar to `numpy.select`. For example, if we had a problem where we want to find the total across columns `A`, `B` and `C` conditional on values in another column, then `numpy.where()` would be useful because it returns elements chosen from the sum result if the condition is met, and do something else otherwise (perhaps assign 0). 
+
+```python
+df = pd.DataFrame(np.random.default_rng(0).normal(size=(10,3)), columns=['A', 'B', 'C'])
+df['Total'] = np.where(df['A'] < 0.78, df[['A','B','C']].sum(axis=1), 0)
+```
+or
+```python
+df['dog'] = ['dog', 'cat']*5
+df['total'] = np.where(df['dog'] == 'dog2', df[['A','B','C']].sum(axis=1), 0)
 ```
 
 
