@@ -46,7 +46,8 @@ plt.legend();
 
 Matplotlib has `dates` module that has convenience functions that converts numbers to datetimes, vice versa, formats dates as specific strings etc.
 
-One way is to detect major tick locations (could also include minor ticks as well depending on how granular the tick labels should be) using the `matplotlib.dates` module and then draw grid using the major ticks.
+One way is to detect major tick locations (could also include minor ticks as well depending on how granular the tick labels should be) using the `matplotlib.dates` module and then draw gridlines at the major tick positions.
+
 ```python
 from datetime import datetime
 import matplotlib.dates as mdates
