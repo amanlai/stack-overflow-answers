@@ -44,14 +44,25 @@ plt.legend();
 
 #### 4. Draw vertical lines at even intervals
 
-Matplotlib has `dates` module that has convenience functions that converts numbers to datetimes, vice versa, formats dates with strings etc. Since x-tick positions are numbers in matplotlib plots, we could use `matplotlib.dates.num2date()` method to convert them into dates and use these dates to plot vertical lines for specific datetimes. For example, to draw a vertical line for January 1, 00:00:00 of every year, use x-limits to get the years and create new datetimes of Jan 1s.
+Matplotlib has `dates` module that has convenience functions that converts numbers to datetimes, vice versa, formats dates as specific strings etc.
 
-Also `matplotlib.dates` can be used to format the dates as specific strings.
-
+One way is to detect major tick locations (could also include minor ticks as well depending on how granular the tick labels should be) using the `matplotlib.dates` module and then draw grid using the major ticks.
 ```python
 from datetime import datetime
 import matplotlib.dates as mdates
 
+plt.plot(xs, ys)
+
+pos = mdates.YearLocator()                    # detect tick locations by year
+fmt = mdates.DateFormatter('%Y-%m-%d')        # format the datetime with '%Y-%m-%d
+plt.gca().xaxis.set(major_locator=pos, major_formatter=fmt)
+plt.grid(axis='x')
+```
+
+Another way is to draw vertical lines on top of the time-series plot. Since x-tick positions are numbers in matplotlib plots, we could use `matplotlib.dates.num2date()` method to convert them into dates and use these dates to plot vertical lines for specific datetimes. For example, to draw a vertical line for January 1, 00:00:00 of every year, use x-limits to get the years and create new datetimes of Jan 1s.
+
+
+```python
 plt.plot(xs, ys)
 xmin, xmax = map(mdates.num2date, plt.xlim())               # get dates on x-limits as dates
 for yr in range(xmin.year, xmax.year):
@@ -62,20 +73,13 @@ for yr in range(xmin.year, xmax.year):
 pos = mdates.AutoDateLocator()                   # detect tick locations automatically
 fmt = mdates.DateFormatter('%Y-%m-%d')           # format the datetime with '%Y-%m-%d
 plt.gca().xaxis.set(major_locator=pos, major_formatter=fmt)
+```
+[![crowded xticks][2]][2]
 
+```python
 # if the tick labels are too crowded, keep only a few of them
 pos, labels = plt.xticks()                       # get xtick positions and labels
 plt.xticks(pos[::2], labels[::2]);               # keep only every second tick
-```
-
-Another way is to detect major tick locations (could also include minor ticks as well depending on how granular the tick labels should be) using the `matplotlib.dates` module and then draw grid using the major ticks.
-```python
-plt.plot(xs, ys)
-
-pos = mdates.YearLocator()                    # detect tick locations by year
-fmt = mdates.DateFormatter('%Y-%m-%d')        # format the datetime with '%Y-%m-%d
-plt.gca().xaxis.set(major_locator=pos, major_formatter=fmt)
-plt.grid(axis='x')
 ```
 
 [![time series plot][3]][3]
@@ -83,4 +87,4 @@ plt.grid(axis='x')
 
   [1]: https://i.stack.imgur.com/6h7Nx.png
   [2]: https://i.stack.imgur.com/EwyoH.png
-  [3]: https://i.stack.imgur.com/ZTP4u.png
+  [3]: https://i.stack.imgur.com/TRBMb.png
