@@ -29,12 +29,11 @@ plt.legend();
 #########################################################
 
 
-
-
 plt.plot(xs, ys)
 xmin, xmax = map(mdates.num2date, plt.xlim())               # get dates on x-limits as dates
 for yr in range(xmin.year, xmax.year):
-    plt.axvline(datetime(yr + 1, 1, 1), color='gray')       # vertical line on Jan 1 midnight
+    # vertical line on Jan 1 midnight
+    plt.axvline(datetime(yr + 1, 1, 1), color='#b0b0b0', linewidth=0.8)
 
 # show datetimes in a specific format
 pos = mdates.AutoDateLocator()                   # detect tick locations automatically
@@ -44,3 +43,15 @@ plt.gca().xaxis.set(major_locator=pos, major_formatter=fmt)
 # if the tick labels are too crowded, keep only a few of them
 pos, labels = plt.xticks()                       # get xtick positions and labels
 plt.xticks(pos[::2], labels[::2]);               # keep only every second tick
+
+
+#########################################################
+
+
+plt.figure(facecolor='white')
+plt.plot(xs, ys)
+
+pos = mdates.YearLocator()                    # detect tick locations by year
+fmt = mdates.DateFormatter('%Y-%m-%d')        # format the datetime with '%Y-%m-%d
+plt.gca().xaxis.set(major_locator=pos, major_formatter=fmt)
+plt.grid(axis='x')
