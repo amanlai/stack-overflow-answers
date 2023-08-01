@@ -1,7 +1,6 @@
 ## What is the difference between `groupby` and `pivot_table`
 
-<sup> This is a combination of my posts that were first written as answers to Stack Overflow questions that may be found [here](https://stackoverflow.com/a/72933069/19123103) and [here](https://stackoverflow.com/a/74048672/19123103). </sup>
-
+<sup> This is a combination of my posts that were first written as answers to Stack Overflow questions that may be found at [1](https://stackoverflow.com/a/72933069/19123103) and [2](https://stackoverflow.com/a/74048672/19123103). </sup>
 
 ### `pivot_table = groupby + unstack` and `groupby = pivot_table + stack` are True.
 
@@ -47,6 +46,9 @@ As `stack()` is the inverse operation of `unstack()`, the following holds True a
 ```
 
 In conclusion, depending on the use case, one is more convenient than the other but they can both be used instead of the other and after correctly applying `stack()`/`unstack()`, both will result in the same output.
+
+---
+
 
 ### Performance difference: `pivot_table` vs `groupby`
 
