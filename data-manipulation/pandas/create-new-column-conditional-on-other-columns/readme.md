@@ -1,45 +1,22 @@
 ## Create new column based on values from other columns / apply a function of multiple columns, row-wise in Pandas
 
-<sup> It's a post that was first posted as an answer to the following Stack Overflow question and can be found at https://stackoverflow.com/a/73643899/19123103 </sup>
+<sup> It's a post that was first posted as an answer to a Stack Overflow question that can be found at [here](https://stackoverflow.com/a/73643899/19123103).</sup>
 
-> I want to apply my custom function (it uses an if-else ladder) to these six columns (`ERI_Hispanic`, `ERI_AmerInd_AKNatv`, `ERI_Asian`, `ERI_Black_Afr.Amer`, `ERI_HI_PacIsl`, `ERI_White`) in each row of my dataframe.
-> 
-> I've tried different methods from other questions but still can't seem to find the right answer for my problem.  The critical piece of this is that if the person is counted as Hispanic they can't be counted as anything else.  Even if they have a "1" in another ethnicity column they still are counted as Hispanic not two or more races.  Similarly, if the sum of all the ERI columns is greater than 1 they are counted as two or more races and can't be counted as a unique ethnicity(except for Hispanic). 
-> 
-> It's almost like doing a for loop through each row and if each record meets a criterion they are added to one list and eliminated from the original.  
-> 
-> From the dataframe below I need to calculate a new column based on the following spec in SQL:
-> 
-> **CRITERIA**
-> ```none
-> IF [ERI_Hispanic] = 1 THEN RETURN “Hispanic”
-> ELSE IF SUM([ERI_AmerInd_AKNatv] + [ERI_Asian] + [ERI_Black_Afr.Amer] + [ERI_HI_PacIsl] + [ERI_White]) > 1 THEN RETURN “Two or More”
-> ELSE IF [ERI_AmerInd_AKNatv] = 1 THEN RETURN “A/I AK Native”
-> ELSE IF [ERI_Asian] = 1 THEN RETURN “Asian”
-> ELSE IF [ERI_Black_Afr.Amer] = 1 THEN RETURN “Black/AA”
-> ELSE IF [ERI_HI_PacIsl] = 1 THEN RETURN “Haw/Pac Isl.”
-> ELSE IF [ERI_White] = 1 THEN RETURN “White”
-> ```
-> Comment: If the ERI Flag for Hispanic is True (1), the employee is classified as “Hispanic”
-> 
-> Comment: If more than 1 non-Hispanic ERI Flag is true, return “Two or More”
-> 
-> 
-> **DATAFRAME**
-> ```none
->      lname   fname  rno_cd  eri_afr_amer  eri_asian  eri_hawaiian  eri_hispanic  eri_nat_amer  eri_white  rno_defined
-> 0     MOST    JEFF       E             0          0             0             0             0          1        White
-> 1   CRUISE     TOM       E             0          0             0             1             0          0        White
-> 2     DEPP  JOHNNY                     0          0             0             0             0          1      Unknown
-> 3    DICAP     LEO                     0          0             0             0             0          1      Unknown
-> 4   BRANDO  MARLON       E             0          0             0             0             0          0        White
-> 5    HANKS     TOM                     0          0             0             0             0          1      Unknown
-> 6   DENIRO  ROBERT       E             0          1             0             0             0          1        White
-> 7   PACINO      AL       E             0          0             0             0             0          1        White
-> 8 WILLIAMS   ROBIN       E             0          0             1             0             0          0        White
-> 9 EASTWOOD   CLINT       E             0          0             0             0             0          1        White
-> ```
 
+If we want to create a new column using values in other columns, what is the best way to approach it? The idea is to apply the following logic
+```none
+IF Hispanic = 1                          THEN RETURN "Hispanic"
+ELSE IF SUM(AmerInd + Asian + White) > 1 THEN RETURN "Two or More"
+ELSE IF AmerInd = 1                      THEN RETURN "A/I AK Native"
+ELSE IF Asian = 1                        THEN RETURN "Asian"
+ELSE IF Black_Afr.Amer = 1               THEN RETURN "Black/AA"
+ELSE IF HI_PacIsl = 1                    THEN RETURN "Haw/Pac Isl."
+ELSE IF White = 1                        THEN RETURN "White"
+```
+into a pandas DataFrame column. Is `apply()` the best way?
+
+
+---
 
 If we inspect its [source code](https://github.com/pandas-dev/pandas/blob/main/pandas/core/apply.py), `apply()` is a syntactic sugar for a Python for-loop (via the `apply_series_generator()` method of the `FrameApply` class). Because it has the pandas overhead, it's generally *slower* than a Python loop.
 
