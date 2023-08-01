@@ -127,6 +127,56 @@ Another possibility is to use `level` parameter of `mean()` after the first `gro
 df.groupby(['cluster', 'org']).mean().mean(level='cluster')
 ```
 
+#### Get the topmost n records within each group
+
+To get the **first N rows of each group**, the canonical way is 
+
+```python
+N = 2
+df.groupby('id').head(N)
+```
+Another way is via `groupby().nth[:N]`. The outcome of this call is the same as `groupby().head(N)`. For example, for the top-2 rows for each id, call:
+```python
+N = 2
+df1 = df.groupby('id', as_index=False).nth[:N]
+```
+
+---
+
+To get the **largest N values of each group**, I suggest two approaches. 
+
+1. First sort by "id" and "value" (make sure to sort "id" in ascending order and "value" in descending order by using the `ascending` parameter appropriately) and then call `groupby().nth[]`.
+   ```python
+   N = 2
+   df1 = df.sort_values(by=['id', 'value'], ascending=[True, False])
+   df1 = df1.groupby('id', as_index=False).nth[:N]
+   ```
+   <br>
+
+2. Another approach is to rank the values of each group and filter using these ranks.
+   ```python
+   # for the entire rows
+   N = 2
+   msk = df.groupby('id')['value'].rank(method='first', ascending=False) <= N
+   df1 = df[msk]
+
+   # for specific column rows
+   df1 = df.loc[msk, 'value']
+   ```
+
+---
+
+Also, instead of slicing, you can also pass a list/tuple/range to a `.nth()` call:
+```python
+df.groupby('id', as_index=False).nth([0,1])
+
+# doesn't even have to be consecutive
+# the following returns 1st and 3rd row of each id
+df.groupby('id', as_index=False).nth([0,2])
+```
+
+
+
 
   [1]: https://i.stack.imgur.com/Nx5gv.png
   [2]: https://i.stack.imgur.com/1OKwX.png
