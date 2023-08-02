@@ -1,6 +1,6 @@
 ## How to convert time difference into seconds, minutes
 
-<sup> This post is based on my answers to Stack Overflow questions that may be found at [1](https://stackoverflow.com/a/74132498/19123103). </sup>
+<sup> This post is based on my answers to Stack Overflow questions that may be found at [1](https://stackoverflow.com/a/74132498/19123103), [2](https://stackoverflow.com/a/73979943/19123103). </sup>
 
 
 #### Convert datetime to UNIX timestamp seconds
@@ -25,7 +25,14 @@ Name: time, dtype: int64
 
 ----
 
-Yet another, faster way is integer division:
+If the aim is to simply convert datetime into numbers, then you can view a datetime column as int64. Since the default resolution is nanoseconds, to convert into seconds, the int64 result must be divided by 10^9.
 ```python
-df['time'].view('int64') / 10**9
+df = pd.DataFrame({'date': pd.date_range('2020','2021', 3)})
+df['as_int64'] = df['date'].view('int64')
+df['seconds_since_epoch'] = df['date'].view('int64') // 10**9
 ```
+[![result][1]][1]
+
+
+
+  [1]: https://i.stack.imgur.com/HYXOu.png
