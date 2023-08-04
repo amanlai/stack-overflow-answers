@@ -43,6 +43,7 @@ df['Max'] = mxs.dot(mxs.columns + ', ').str.rstrip(', ')
 ---
 
 A slight variation: If you want to **pick one column randomly** when multiple columns contain the maximum value:
+
 [![case2][2]][2]
 
 Code:
