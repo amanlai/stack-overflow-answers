@@ -27,4 +27,5 @@ for i, lst in enumerate([[('Numeric', numeric), ('Object dtype', string)],
         else:
             axs[i, j].set_axis_off()
 
+fig.tight_layout();
 fig.savefig('perfplot_test.png')
