@@ -1,6 +1,6 @@
 ## How to use groupby in pandas
 
-<sup> This post is based on my answers to Stack Overflow questions that may be found at [1](https://stackoverflow.com/a/72905344/19123103), [2](https://stackoverflow.com/a/72916928/19123103), [3](https://stackoverflow.com/a/72918043/19123103), [4](https://stackoverflow.com/a/72919143/19123103). </sup>
+<sup> This post is based on my answers to Stack Overflow questions that may be found at [1](https://stackoverflow.com/a/72905344/19123103), [2](https://stackoverflow.com/a/72916928/19123103), [3](https://stackoverflow.com/a/72918043/19123103), [4](https://stackoverflow.com/a/72919143/19123103), [5](https://stackoverflow.com/a/73700193/19123103). </sup>
 
 #### How to use group-by to get group sum
 
@@ -174,6 +174,44 @@ df.groupby('id', as_index=False).nth([0,1])
 # the following returns 1st and 3rd row of each id
 df.groupby('id', as_index=False).nth([0,2])
 ```
+
+#### Add a sequential counter column on groups
+
+A common problem encountered in data manipulation is to add a group-wise sequential counter column to a pandas DataFrame. The main 
+
+```python
+df['counter'] = df.groupby('grouper').cumcount() + 1
+```
+
+If you have a dataframe similar to the one below and you want to add `seq` column by building it from `c1` or `c2`, i.e. keep a running count of similar values (or until a flag comes up) in other column(s).
+```python
+df = pd.DataFrame(
+    columns="  c1      c2    seq".split(),
+    data= [
+            [ "A",      1,    1 ],
+            [ "A1",     0,    2 ],
+            [ "A11",    0,    3 ],
+            [ "A111",   0,    4 ],
+            [ "B",      1,    1 ],
+            [ "B1",     0,    2 ],
+            [ "B111",   0,    3 ],
+            [ "C",      1,    1 ],
+            [ "C11",    0,    2 ] ])
+```
+then first find group starters, (`str.contains()` (and `eq()`) is used below but any method that creates a boolean Series such as `lt()`, `ne()`, `isna()` etc. can be used) and call `cumsum()` on it to create a Series where each group has a unique identifying value. Then use it as the grouper on a `groupby().cumsum()` operation.
+
+In summary, use a code similar to the one below.
+```python
+# build a grouper Series for similar values
+groups = df['c1'].str.contains("A$|B$|C$").cumsum()
+
+# or build a grouper Series from flags (1s)
+groups = df['c2'].eq(1).cumsum()
+
+# groupby using the above grouper
+df['seq'] = df.groupby(groups).cumcount().add(1)
+```
+
 
 
 
