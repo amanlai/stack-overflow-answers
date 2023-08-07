@@ -177,7 +177,7 @@ df.groupby('id', as_index=False).nth([0,2])
 
 #### Add a sequential counter column on groups
 
-A common problem encountered in data manipulation is to add a group-wise sequential counter column to a pandas DataFrame. The main 
+A common problem encountered in data manipulation is to add a group-wise sequential counter column to a pandas DataFrame. The idea is to keep a counter column for each group simultaneously. It is very easy to do using `groupby` in pandas. The method to be used on a groupby object is the cumulative counter - `cumcount()`.
 
 ```python
 df['counter'] = df.groupby('grouper').cumcount() + 1
