@@ -1,6 +1,6 @@
 ## How to assign values based on a condition
 
-<sup>This is based on my answer to a Stack Overflow question that may be found [here](https://stackoverflow.com/a/73728391/19123103).</sup>
+<sup>This is based on my answer to a Stack Overflow question that may be found at [1](https://stackoverflow.com/a/73728391/19123103), [2](https://stackoverflow.com/a/73687100/19123103).</sup>
 
 
 Suppose we want to assign a new column to a pandas DataFrame using the following condition on an existing column:
