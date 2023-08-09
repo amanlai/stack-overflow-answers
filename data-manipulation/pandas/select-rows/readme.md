@@ -1,6 +1,6 @@
 ## Select rows from a DataFrame
 
-<sup>This post is based on my answers to Stack Overflow questions that may be found at [1](https://stackoverflow.com/a/73762002/19123103), [2](https://stackoverflow.com/a/72842272/19123103), [3](https://stackoverflow.com/a/72862831/19123103), [4](https://stackoverflow.com/a/72873572/19123103) and [5](https://stackoverflow.com/a/73074165/19123103). </sup>
+<sup>This post is based on my answers to Stack Overflow questions that may be found at [1](https://stackoverflow.com/a/73762002/19123103), [2](https://stackoverflow.com/a/72842272/19123103), [3](https://stackoverflow.com/a/72862831/19123103), [4](https://stackoverflow.com/a/72873572/19123103) and [5](https://stackoverflow.com/a/73074165/19123103), [5](https://stackoverflow.com/a/73673468/19123103). </sup>
 
 ### 1. Use f-strings inside `query()` calls
 
@@ -213,6 +213,30 @@ conditions = [
 df.loc[np.bitwise_and.reduce(conditions), 'A']
 ```
 
+#### Get index of rows where column matches certain value
+
+The canonical method is to use a boolean condition on the index to filter it.
+```python
+df.index[df['BoolCol']].tolist()
+```
+Another method is to call `query()`:
+```python
+df.query('BoolCol')
+```
+
+Another method is to use `pipe()` to pipe the indexing of the index of `BoolCol`. In terms of performance, it's as efficient as the canonical indexing using `[]`.<sup>4</sup>
+```python
+df['BoolCol'].pipe(lambda x: x.index[x])
+```
+This is especially useful if `BoolCol` is actually the result of multiple comparisons and you want to use method chaining to put all methods in a pipeline.
+
+For example, if you want to get the row indexes where `NumCol` value is greater than 0.5, `BoolCol` value is True and the product of `NumCol` and `BoolCol` values is greater than 0, you can do so by evaluating an expression via `eval()` and call `pipe()` on the result to perform the indexing of the indexes.<sup>5</sup>
+```python
+df.eval("NumCol > 0.5 and BoolCol and NumCol * BoolCol >0").pipe(lambda x: x.index[x])
+```
+
+
+
 ---
 
 <sup>1</sup> Benchmark code using a frame with 80k rows can be found on the current repo [here][7].
@@ -221,7 +245,9 @@ df.loc[np.bitwise_and.reduce(conditions), 'A']
 
 <sup>3</sup>: Code used to produce the performance graphs of the two methods for strings and numbers can be found on the current repo [here][5].
 
+<sup>4</sup>: The following benchmark used a dataframe with 20mil rows (on average filtered half of the rows) and retrieved their indexes. The method chaining via `pipe()` does very well compared to the other efficient options. The code used for this test may be found on the current repo [here][8].
 
+<sup>5</sup>: For a 20 mil row dataframe constructed in the same way as in <sup>1</sup>) for the benchmark, you will find that the method proposed here is the fastest option. It performs better than bitwise-operator chaining because by design, `eval()` performs multiple operations on a large dataframe faster than vectorized Python operations and it is more memory efficient than `query()` because unlike `query()`, `eval().pipe(...)` doesn't need to create a copy of the sliced dataframe to get its index.
 
 
   [1]: https://pandas.pydata.org/docs/getting_started/install.html#install-recommended-dependencies
@@ -231,3 +257,4 @@ df.loc[np.bitwise_and.reduce(conditions), 'A']
   [5]: ./perfplot_tester.py
   [6]: ./timeit_tester_800k.py
   [7]: ./timeit_tester_80k.py
+  [8]: ./timeit_tester_index.py
