@@ -1,6 +1,6 @@
 ## How to assign values based on a condition
 
-<sup>This is based on my answer to a Stack Overflow question that may be found at [1](https://stackoverflow.com/a/73728391/19123103), [2](https://stackoverflow.com/a/73687100/19123103).</sup>
+<sup>This is based on my answer to a Stack Overflow question that may be found at [1](https://stackoverflow.com/a/73728391/19123103), [2](https://stackoverflow.com/a/73687100/19123103), [3](https://stackoverflow.com/a/73669816/19123103).</sup>
 
 
 Suppose we want to assign a new column to a pandas DataFrame using the following condition on an existing column:
@@ -28,7 +28,7 @@ Another, a bit more convoluted way is via `numpy.where()`. It is designed for tw
 df['points'] = np.where( ( (df['gender'] == 'male') & (df['pet1'] == df['pet2'] ) ) | ( (df['gender'] == 'female') & (df['pet1'].isin(['cat','dog'] ) ) ), 5, 0)
 ```
 
-Writing the conditions as a string expression and evaluating it using `eval()` is another method to evaluate the condition and assign values to the column using `numpy.where()`. 
+Writing the conditions as a string expression and evaluating it using `eval()` is another method to evaluate the condition. Then using its outcome as a `numpy.where()` condition, you can assign values  as follows.
 ```python
 # evaluate the condition 
 condition = df.eval("gender=='male' and pet1==pet2 or gender=='female' and pet1==['cat','dog']")
@@ -37,7 +37,9 @@ df['points'] = np.where(condition, 5, 0)
 ```
 If you have a large dataframe (100k+ rows) and a lot of comparisons to evaluate, this method is probably the fastest pandas method to construct a boolean mask.<sup>1</sup>
 
-Another advantage of this method over chained `&` and/or `|` operators (used in the other vectorized answers here) is better readability (arguably).
+If you installed numexpr (`pip install numexpr`) as [recommended](https://pandas.pydata.org/docs/getting_started/install.html#install-recommended-dependencies) in the pandas documentation, this method should perform as well (and better if you have a lot of conditions to reduce) as chaining via `&`. The advantage is that (i) it's much more readable (imo) and (ii) you don't need to worry about brackets `()`, `and`/`&` etc. anymore because the order of precedence inside the string expression is the same as [that in Python](https://docs.python.org/3/reference/expressions.html#operator-precedence).
+
+
 
 ---
 
