@@ -45,6 +45,18 @@ If you have a large dataframe (100k+ rows) and a lot of comparisons to evaluate,
 If you installed numexpr (`pip install numexpr`) as [recommended](https://pandas.pydata.org/docs/getting_started/install.html#install-recommended-dependencies) in the pandas documentation, this method should perform as well (and better if you have a lot of conditions to reduce) as chaining via `&`. The advantage is that (i) it's much more readable (imo) and (ii) you don't need to worry about brackets `()`, `and`/`&` etc. anymore because the order of precedence inside the string expression is the same as [that in Python](https://docs.python.org/3/reference/expressions.html#operator-precedence).
 
 
+#### `loc`
+
+Another method is use `loc` iteratively.
+```
+df = pd.DataFrame({
+    'age' : [21, 45, 45, 5],
+    'salary' : [20, 40, 10, 100]
+})
+
+df['is_rich_method3'] = 'no'
+df.loc[df['salary'] > 50, 'is_rich_method3'] = 'yes'
+```
 
 #### `mask()`
 
