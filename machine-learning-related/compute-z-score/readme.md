@@ -33,3 +33,5 @@ from sklearn.preprocessing import StandardScaler
 sc = StandardScaler()
 df[new_cols] = sc.fit_transform(df[cols])
 ```
+
+A timeit test that may be found on this repo ([here](./timeit_test.py)) shows that `stats.zscore` called on the entire DataFrame is the fastest option.
