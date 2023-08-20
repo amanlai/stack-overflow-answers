@@ -1,0 +1,19 @@
+[
+    {
+        "id": 401281949,
+        "teams": [
+            {
+                "school": "Louisiana Tech",
+                "conference": "Conference USA",
+                "homeAway": "away",
+                "points": 34,
+                "stats": [
+                    {"category": "rushingTDs", "stat": "1"},
+                    {"category": "puntReturnYards", "stat": "24"},
+                    {"category": "puntReturnTDs", "stat": "0"},
+                    {"category": "puntReturns", "stat": "3"},
+                ],
+            }
+        ],
+    }
+]
