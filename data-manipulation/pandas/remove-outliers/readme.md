@@ -26,3 +26,8 @@ fence_bounds = quantiles + iqr * [-1.5, 1.5]
 # check if units are outside their respective tukey ranges
 df['flag'] = df.merge(fence_bounds, left_on='prod', right_index=True).eval('not (`0.25` < units < `0.75`)').astype(int)
 ```
+
+[![output][1]][1]
+
+
+  [1]: https://i.stack.imgur.com/daFdn.png
