@@ -36,6 +36,29 @@ gap = t_val * np.sqrt(mse * var_params)
 
 conf_int = pd.DataFrame({'lower': coefs - gap, 'upper': coefs + gap}, index=X_aux.columns)
 ```
+
+The above code is wrapped in a convenience function wrapper that may be found on the current repo [here](./conf_int.py). This function may be used as follows.
+```python
+import pandas as pd
+from sklearn.datasets import load_boston
+from sklearn.linear_model import LinearRegression
+from conf_int import get_conf_int
+
+# load data
+boston_dataset = load_boston()
+data = pd.DataFrame(boston_dataset.data, columns=boston_dataset.feature_names)
+X = data.filter(['LSTAT', 'RM'])
+y = boston_dataset.target
+
+
+# for 95% confidence interval; use 0.01 for 99%-CI.
+alpha = 0.05
+# fit a sklearn LinearRegression model
+lin_model = LinearRegression().fit(X, y)
+
+get_conf_int(alpha, lin_model, X, y)
+```
+
 Using the Boston housing dataset, the above code produces the dataframe below:
 
 [![res][1]][1]
