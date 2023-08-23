@@ -1,7 +1,6 @@
 import numpy as np
 import pandas as pd
 from scipy import stats
-from sklearn.linear_model import LinearRegression
 
 
 def get_conf_int(alpha, lr, X, y):
