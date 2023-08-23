@@ -4,7 +4,16 @@
 
 #### Manual computation
 
-One way is to manually compute it using the results of `LinearRegression` from scikit-learn and numpy methods.
+One way is to manually compute it using the results of `LinearRegression` from scikit-learn and numpy methods. The confidence intervals can be computed directly from the mean squared error (MSE) and inverse of the parameter variances.
+
+The workflow goes as follows.
+1. Fit a LinearRegression model
+2. Prepare the coefficients and features. This is a necessary step because the bias term is a separate attribute of a fit model.
+3. Compute degrees of freedom. This is needed to lookup the Student's t-distribution table for the critical value.
+4. Compute MSE. This can be computed from the true target values and the corresponding predictions.
+5. Compute inverse of the variance of the parameters. This is diagonals of the inverse of the dot product of the features.
+6. Compute distance between lower and upper bound of the confidence intervals. The values computed in (4) and (5) determine this value.
+7. Compute confidence interval. This is the space created between the gap created in (6).
 
 The code below computes the 95%-confidence interval (`alpha=0.05`). `alpha=0.01` would compute 99%-confidence interval etc.
 ```python
