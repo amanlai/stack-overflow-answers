@@ -1,6 +1,13 @@
 ## How to use groupby in pandas
 
-<sup> This post is based on my answers to Stack Overflow questions that may be found at [1](https://stackoverflow.com/a/72905344/19123103), [2](https://stackoverflow.com/a/72916928/19123103), [3](https://stackoverflow.com/a/72918043/19123103), [4](https://stackoverflow.com/a/72919143/19123103), [5](https://stackoverflow.com/a/73700193/19123103). </sup>
+<sup> This post is based on my answers to Stack Overflow questions that may be found at 
+[1](https://stackoverflow.com/a/72905344/19123103), 
+[2](https://stackoverflow.com/a/72916928/19123103), 
+[3](https://stackoverflow.com/a/72918043/19123103), 
+[4](https://stackoverflow.com/a/72919143/19123103), 
+[5](https://stackoverflow.com/a/73700193/19123103),
+[6](https://stackoverflow.com/a/75181207/19123103).
+</sup>
 
 #### How to use group-by to get group sum
 
