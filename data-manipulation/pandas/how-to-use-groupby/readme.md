@@ -9,6 +9,43 @@
 [6](https://stackoverflow.com/a/75181207/19123103).
 </sup>
 
+#### Count size of each group
+
+It can be done using two main ways:
+
+- `value_counts()`
+- `groupby.size`
+
+```python
+df[cols].value_counts()
+# or 
+df.groupby(cols).size()
+```
+
+If you want to construct a DataFrame as a final result (not a pandas Series), use the `as_index=` parameter:
+```python
+df.groupby(['col5', 'col2'], as_index=False).size()
+```
+[![res1][0]][0]
+
+---
+
+If you don't want to count NaN values, you can use `groupby.count`:
+```python
+df.groupby(['col5', 'col2']).count()
+```
+[![res3][3]][3]
+
+Note that since each column may have different number of non-NaN values, unless you specify the column, a simple `groupby.count` call may return different counts for each column as in the example above. For example, the number of non-NaN values in `col1` after grouping by `['col5', 'col2']` is as follows:
+```python
+df.groupby(['col5', 'col2'])['col1'].count()
+```
+[![res4][4]][4]
+
+
+
+---
+
 #### How to use group-by to get group sum
 
 The canonical way is as follows.
@@ -223,5 +260,9 @@ df['seq'] = df.groupby(groups).cumcount().add(1)
 
 
 
+  [0]: https://i.stack.imgur.com/twtbW.png
   [1]: https://i.stack.imgur.com/Nx5gv.png
   [2]: https://i.stack.imgur.com/1OKwX.png
+  [3]: https://i.stack.imgur.com/3Z30j.png
+  [4]: https://i.stack.imgur.com/dA6NJ.png
+
