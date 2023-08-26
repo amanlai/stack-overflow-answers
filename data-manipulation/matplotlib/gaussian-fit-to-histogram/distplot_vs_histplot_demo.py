@@ -1,5 +1,6 @@
 import numpy as np
 import seaborn as sns
+import matplotlib.pyplot as plt
 
 # sample data
 x = np.random.default_rng(0).normal(1, 4, size=500) * 0.1
