@@ -12,7 +12,11 @@ However, `distplot` is deprecated, so how do we fill in the gap in this function
 
 ---
 
+
+### How to plot a gaussian fit on top of a histogram
+
 `distplot`'s [source code](https://github.com/mwaskom/seaborn/blob/58cf6285d7299ac6dda83bbd4af8dbd019c58058/seaborn/distributions.py#L2517-L2534) regarding `fit=` parameter is works as follows. 
+
 1. initialize some support array,
 2. compute the PDF parameters e.g. mean/std of the given data
 3. compute PDF values from it using the mean/std of the given data
@@ -46,6 +50,8 @@ add_fit_to_histplot(x, fit=stats.norm, ax=ax2)
 The code used to produce the above figure may be found on this repo [here](./distplot_vs_histplot_demo.py).
 
 ---
+
+### Why not just plot a normal distribution?
 
 This answer differs from simply drawing a normal distribution on top of a `histplot()` instance because it fits a gaussian (or any other continuous distribution e.g. gamma) on the histogram where there is data (which is also how the fit is plotted in `distplot()`). The aim is to replicate `distplot()`'s fit functionality as much as possible.
 
