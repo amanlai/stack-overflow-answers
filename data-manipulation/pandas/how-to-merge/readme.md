@@ -2,6 +2,19 @@
 
 <sup>This post is based on my answer to a Stack Overflow question that may be found [here](https://stackoverflow.com/a/75190030/19123103).</sup>
 
+To merge two dataframes on columns with common keys, simply pass the relevant column(s) from each dataframe as follows:
+```python
+merged_df = df1.merge(df2, left_on='common_column_1', right_on='common_column_2')
+```
+If the column to match on each dataframe has the same label, it's even easier:
+```python
+merged_df = df1.merge(df2, on='common_column')
+```
+
+To merge on **multiple columns**, pass the columns as a list.
+```python
+merged_df = df1.merge(df2, on=['common_column_1', 'common_column_2'])
+```
 
 
 ### Some common questions about merging on multiple columns
