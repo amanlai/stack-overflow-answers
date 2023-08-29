@@ -1,6 +1,7 @@
 ## Convert columns to string in Pandas
 
-<sup> This post is based on my answers to Stack Overflow questions that may be found at [1](https://stackoverflow.com/a/75528571/19123103) and [2](https://stackoverflow.com/a/75230706/19123103). </sup>
+<sup> This post is based on my answer to a Stack Overflow question that may be found [here](https://stackoverflow.com/a/75528571/19123103). </sup>
+
 
 _Most of the time_, `astype()` should be enough.
 ```python
@@ -43,37 +44,20 @@ One way numeric->string seems to be used is in a machine learning context where 
 
 #### 3. Use `rename` to convert column names to specific types
 
-The specific question in the OP is about converting column _names_ to strings, which can be done by `rename` method:
+If you want to convert column _labels_ to strings (not the dataframe body), then `rename()` is the method for that task. Simply passing the string constructor function `str()` to the `rename()` method does the job.
 ```python
-df = total_rows.pivot_table(columns=['ColumnID'])
-df.rename(columns=str).to_dict('records')
-# [{'-1': 2, '3030096843': 1, '3030096845': 1}]
+df = pd.DataFrame([[1, 2], [3, 4]])
+df.columns.dtype    # dtype('int64')
+
+df.rename(columns=str, inplace=True)
+df.columns.dtype  # dtype('O')
 ```
+
 
 ---
 
 
-The code used to produce the above plots:
-```python
-import numpy as np
-from perfplot import plot
-plot(
-    setup=lambda n: pd.Series(np.random.default_rng().integers(0, 100, size=n)),
-    kernels=[lambda s: s.astype(str), lambda s: s.astype("string"), lambda s: s.apply(str), lambda s: s.map(str), lambda s: s.map(repr)],
-    labels= ['col.astype(str)', 'col.astype("string")', 'col.apply(str)', 'col.map(str)', 'col.map(repr)'],
-    n_range=[2**k for k in range(4, 22)],
-    xlabel='Number of rows',
-    title='Converting a single column into string dtype',
-    equality_check=lambda x,y: np.all(x.eq(y)));
-plot(
-    setup=lambda n: pd.DataFrame(np.random.default_rng().integers(0, 100, size=(n, 100))),
-    kernels=[lambda df: df.astype(str), lambda df: df.astype("string"), lambda df: df.applymap(str), lambda df: df.apply(lambda col: col.map(repr))],
-    labels= ['df.astype(str)', 'df.astype("string")', 'df.applymap(str)', 'df.apply(lambda col: col.map(repr))'],
-    n_range=[2**k for k in range(4, 18)],
-    xlabel='Number of rows in dataframe',
-    title='Converting every column of a 100-column dataframe to string dtype',
-    equality_check=lambda x,y: np.all(x.eq(y)));
-```
+The code used to produce the runtime timing plot may be found on the current repo [here](./numbers_to_string_test.py).
 
 
   [1]: https://i.stack.imgur.com/cr3dc.png
