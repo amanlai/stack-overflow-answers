@@ -1,38 +1,15 @@
 ## Convert columns to string in Pandas
 
-<sup> It's a post that was first posted as an answer to the following Stack Overflow question, which may be found [here](https://stackoverflow.com/a/75528571/19123103). </sup>
+<sup> This post is based on my answers to Stack Overflow questions that may be found at [1](https://stackoverflow.com/a/75528571/19123103) and [2](https://stackoverflow.com/a/75230706/19123103). </sup>
 
-https://stackoverflow.com/a/75505969/19123103
+_Most of the time_, `astype()` should be enough.
+```python
+# for a string column
+df['col'] = df['col'].astype(str)
 
-> I have the following DataFrame from a SQL query:
-> ```none
-> (Pdb) pp total_rows
->      ColumnID  RespondentCount
-> 0          -1                2
-> 1  3030096843                1
-> 2  3030096845                1
-> ```
-> and I pivot it like this:
-> ```python
-> total_data = total_rows.pivot_table(cols=['ColumnID'])
-> ```
-> which produces
-> ```none
-> (Pdb) pp total_data
-> ColumnID         -1            3030096843   3030096845
-> RespondentCount            2            1            1
-> 
-> [1 rows x 3 columns]
-> ```
-> When I convert this dataframe into a dictionary (using `total_data.to_dict('records')[0]`), I get
-> ```python
-> {3030096843: 1, 3030096845: 1, -1: 2}
-> ```
-> but I want to make sure the 303 columns are cast as strings instead of integers so that I get this:
-> ```python
-> {'3030096843': 1, '3030096845': 1, -1: 2}
-> ```
-
+# for nullable string type
+df['col'] = df['col'].astype('string')
+```
 
 #### 1. `.map(repr)` is very fast
 
