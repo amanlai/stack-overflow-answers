@@ -1,30 +1,7 @@
-### 1. `.map(repr)` is very fast
-
-# If you want to convert values to strings in a column, consider `.map(repr)`. 
-# For multiple columns, consider `.applymap(str)`.
-
-import pandas as pd
-df = pd.DataFrame({'col': range(10)})
-df['col_as_str'] = df['col'].map(repr)
-
-# multiple columns
-df[['col1', 'col2']] = df[['col1', 'col2']].applymap(str)
-# or
-df[['col1', 'col2']] = df[['col1', 'col2']].apply(lambda col: col.map(repr))
-
-
-### 2. Use `rename` to convert column names to specific types
-
-df = pd.DataFrame({'ColumnID': range(4), 'value': range(4)})
-df = df.pivot_table(columns=['ColumnID'])
-df.rename(columns=str).to_dict('records')
-
-
-# The code used to produce the performance plots:
-
 import numpy as np
 import matplotlib.pyplot as plt
 from perfplot import plot
+
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(15,5), facecolor='white')
 plt.sca(ax1)
 plot(
@@ -44,3 +21,4 @@ plot(
     xlabel='Number of rows in dataframe',
     title='Converting every column of a 100-column dataframe to string dtype',
     equality_check=lambda x,y: np.all(x.eq(y)));
+fig.savefig('benchmark.png')

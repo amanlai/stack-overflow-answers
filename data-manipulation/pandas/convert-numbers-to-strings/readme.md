@@ -50,7 +50,7 @@ df = pd.DataFrame([[1, 2], [3, 4]])
 df.columns.dtype    # dtype('int64')
 
 df.rename(columns=str, inplace=True)
-df.columns.dtype  # dtype('O')
+df.columns.dtype    # dtype('O')
 ```
 
 
