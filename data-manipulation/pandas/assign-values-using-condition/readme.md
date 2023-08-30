@@ -110,6 +110,14 @@ new_df = (
     .reindex(columns=[*df.columns[:], *cols, *df.columns[1:]])
 )
 
+A more robust version is to split the dataframe into two and concatenate back with the new dataframe sandwiched between.
+```python
+tmp = pd.DataFrame(0, index=df.index, columns=range(1, 32))
+
+new_df = pd.concat([df.iloc[:,:1], df, df.iloc[:, 1:]], axis=1)
+```
+
+
 
 ---
 
