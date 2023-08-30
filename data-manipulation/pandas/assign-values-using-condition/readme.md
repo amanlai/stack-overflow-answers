@@ -1,6 +1,12 @@
 ## How to assign values based on a condition
 
-<sup>This is based on my answers to Stack Overflow questions that may be found at [1](https://stackoverflow.com/a/73728391/19123103), [2](https://stackoverflow.com/a/73687100/19123103), [3](https://stackoverflow.com/a/73669816/19123103), [4](https://stackoverflow.com/a/73664277/19123103).</sup>
+<sup>This is based on my answers to Stack Overflow questions that may be found at 
+[1](https://stackoverflow.com/a/73728391/19123103), 
+[2](https://stackoverflow.com/a/73687100/19123103), 
+[3](https://stackoverflow.com/a/73669816/19123103), 
+[4](https://stackoverflow.com/a/73664277/19123103).
+[5](https://stackoverflow.com/a/75238820/19123103)
+</sup>
 
 
 Suppose we want to assign a new column to a pandas DataFrame using the following condition on an existing column:
@@ -73,6 +79,36 @@ It is probably the fastest option. For example, for a frame with 10 mil rows, `m
 
 [![res][1]][1]
 
+
+
+### Insert several columns at a specific position
+
+On a completely different topic, say, we want to insert several columns in a specific column position in a dataframe, how do we go about it?
+
+For example, if we have a dataframe with 2 columns and we want to insert a dataframe with 3 columns between columns A and B? In other words, we want to make the following transformation:
+```none
+A B        A x y z B
+0 a   ->   0 0 0 0 a
+1 b        1 0 0 0 b
+2 c        2 0 0 0 c
+```
+
+
+One way is to assign values to the original dataframe and reorder the columns using column selection.
+
+```python
+df[['x', 'y', 'z']] = 0
+df[[*df.columns[:1], 'x', 'y', 'z', *df.columns[1]]]
+```
+
+or for an entirely new copy, use `assign`:
+
+cols = ['x', 'y', 'z']
+new_df = (
+    df
+    .assign(**dict.fromkeys(cols, 0))
+    .reindex(columns=[*df.columns[:], *cols, *df.columns[1:]])
+)
 
 
 ---
