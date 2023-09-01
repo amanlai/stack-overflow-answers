@@ -7,10 +7,10 @@ The specific use case is as follows.
 Suppose you have a dataframe (`spend_df`) for daily fruit spend which looks like this:
 
 ```none
-Date        Apples      Pears      Grapes
-01/01/22      10         47          0
-02/01/22      0          22          3
-03/01/22      11         0           3
+    Date   Apples   Pears   Grapes
+01/01/22       10      47        0
+02/01/22        0      22        3
+03/01/22       11       0        3
 ...
 ```
 
