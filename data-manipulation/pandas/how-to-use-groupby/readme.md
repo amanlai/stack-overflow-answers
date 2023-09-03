@@ -259,6 +259,50 @@ groups = df['c2'].eq(1).cumsum()
 df['seq'] = df.groupby(groups).cumcount().add(1)
 ```
 
+---
+
+#### Calculate mean and standard deviation of each group
+
+Suppose you have a Pandas DataFrame as below:
+```none
+   a       b  c  d 
+0  Apple   1  5  a
+1  Banana  2  4  b
+2  Cherry  3  1  c
+3  Apple   1  4  a
+```
+
+and would like to group the rows by column 'a' and find the mean and standard deviation of column `c` values for each fruit. What is the best way do it?
+
+If values in some columns are constant for all rows being grouped (e.g. 'b', 'd' as above), then you can include it into the grouper and reorder the columns later.
+```python
+new_df = (
+    df.groupby(['a', 'b', 'd'])['c'].agg(['mean', 'std'])   # groupby operation
+    .set_axis(['c', 'e'], axis=1)                           # rename columns
+    .reset_index()                                          # make groupers into columns
+    [['a', 'b', 'c', 'd', 'e']]                             # reorder columns
+)
+```
+You can also use named aggregation to have the groupby result have custom column names. The `mean` column is named `'c'` and `std` column is named `'e'` at the end of `groupby.agg`.
+```python
+new_df = (
+    df.groupby(['a', 'b', 'd'])['c'].agg([('c', 'mean'), ('e', 'std')])
+    .reset_index()                                          # make groupers into columns
+    [['a', 'b', 'c', 'd', 'e']]                             # reorder columns
+)
+```
+[![res1][5]][5]
+
+
+You can also pass arguments to `groupby.agg`. For example, if you need to pass `ddof=0` to `std()` in `groupby.agg`, you can do so using a lambda.
+```python
+new_df = (
+    df.groupby(['a', 'b', 'd'])['c'].agg([('c', 'mean'), ('e', lambda g: g.std(ddof=0))])
+    .reset_index()[['a', 'b', 'c', 'd', 'e']]
+)
+```
+[![res2][6]][6]
+
 
 
 
@@ -268,4 +312,6 @@ df['seq'] = df.groupby(groups).cumcount().add(1)
   [2]: https://i.stack.imgur.com/1OKwX.png
   [3]: https://i.stack.imgur.com/3Z30j.png
   [4]: https://i.stack.imgur.com/dA6NJ.png
+  [5]: https://i.stack.imgur.com/BXECh.png
+  [6]: https://i.stack.imgur.com/GNOQG.png
 
