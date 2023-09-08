@@ -1,6 +1,21 @@
 ## Convert Pandas Column to DateTime
 
-<sup> This is based on my answers to Stack Overflow questions that can be found [here](https://stackoverflow.com/q/26763344/19123103), [here](https://stackoverflow.com/a/75253473/19123103) and [here](https://stackoverflow.com/q/56614558/19123103). </sup>
+<sup> This is based on my answers to Stack Overflow questions that can be found at 
+[1](https://stackoverflow.com/q/26763344/19123103), 
+[2](https://stackoverflow.com/a/75253473/19123103),
+[3](https://stackoverflow.com/q/56614558/19123103), 
+[4](https://stackoverflow.com/a/75272623/19123103)
+</sup>
+
+#### `pd.to_datetime()`
+
+The canonical method for this task is to call `pd.to_datetime()` on the column. It is a very general function that can parse
+
+> int, float, str, datetime, list, tuple, 1-d array, Series, DataFrame/dict-like
+
+so even an int column can be converted into a datetime column if the integers are datetime-like.
+
+This is more preferred compared to `astype('datetime64[ns]')` because it provides error handling, more general parser etc.
 
 #### Multiple datetime columns
 
