@@ -1,5 +1,7 @@
 ## Resampling error: Only valid with DatetimeIndex, TimedeltaIndex or PeriodIndex
 
+<sup>This post is reproduced from my answer to a Stack Overflow question that may be found [here](https://stackoverflow.com/a/75273282/19123103).</sup>
+
 Because it is designed for time-series data, as the error says, `resample()` works only if the index is datetime, timedelta or period. The following are a few common ways this error may show up.
 
 However, you can also use the `on=` parameter to **use a column as grouper**, without having a datetime index.
