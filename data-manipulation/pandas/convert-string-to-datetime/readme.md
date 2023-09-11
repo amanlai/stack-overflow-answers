@@ -1,10 +1,10 @@
 ## Convert Pandas Column to DateTime
 
 <sup> This is based on my answers to Stack Overflow questions that can be found at 
-[1](https://stackoverflow.com/q/26763344/19123103), 
+[1](https://stackoverflow.com/a/75277434/19123103), 
 [2](https://stackoverflow.com/a/75253473/19123103),
 [3](https://stackoverflow.com/q/56614558/19123103), 
-[4](https://stackoverflow.com/a/75272623/19123103)
+[4](https://stackoverflow.com/a/75272623/19123103).
 </sup>
 
 #### `pd.to_datetime()`
