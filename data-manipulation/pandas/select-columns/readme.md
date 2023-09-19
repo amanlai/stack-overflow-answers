@@ -1,6 +1,9 @@
 ## Selecting columns from a dataframe
 
-<sup> This repo is based on my answers to Stack Overflow questions that can be found [here](https://stackoverflow.com/a/75901708/19123103) and [here](https://stackoverflow.com/a/75974729/19123103). </sup>
+<sup> This repo is based on my answers to Stack Overflow questions that can be found at 
+[1](https://stackoverflow.com/a/75901708/19123103),
+[2](https://stackoverflow.com/a/75974729/19123103),
+[3](https://stackoverflow.com/a/75319130/19123103). </sup>
 
 
 
