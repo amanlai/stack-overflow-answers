@@ -1,6 +1,6 @@
 ## How to solve the error: `ufunc 'isfinite' not supported for the input types`
 
-<sup>This post is based on my answer to a Stack Overflow question that may be found [here](https://stackoverflow.com/a/75319814/19123103).</sup>
+<sup>This post is based on my answer to a Stack Overflow question that may be found [1](https://stackoverflow.com/a/75319814/19123103) and [2](https://stackoverflow.com/a/75551268/19123103).</sup>
 
 If you got this error, that means the function you called used `np.isfinite` under the hood. Common functions that do so are `np.allclose`, `np.isclose` and `linalg` methods (as in the OP). It usually means the dtype of your array is `object`.
 
