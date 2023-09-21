@@ -7,7 +7,8 @@
 [4](https://stackoverflow.com/a/72919143/19123103), 
 [5](https://stackoverflow.com/a/73700193/19123103),
 [6](https://stackoverflow.com/a/75181207/19123103),
-[7](https://stackoverflow.com/a/75249900/19123103).
+[7](https://stackoverflow.com/a/75249900/19123103),
+[8](https://stackoverflow.com/a/75609289/19123103),
 </sup>
 
 #### Count size of each group
@@ -220,6 +221,49 @@ df.groupby('id', as_index=False).nth([0,1])
 # the following returns 1st and 3rd row of each id
 df.groupby('id', as_index=False).nth([0,2])
 ```
+
+---
+
+#### Select row by max value in group
+
+Given a MultiIndex dataframe where one of the index levels is datetime, how do you select the rows that correspond to the latest value in each group. In other words, for the following dataframe, how do you select the rows for each `F_Type` where the values are the latest?
+
+```none
+                                 start  end
+F_Type         to_date                     
+A              20150908143000    345    316
+B              20150908140300    NaN    480
+               20150908140600    NaN    120
+               20150908143000  10743   8803
+C              20150908140100    NaN   1715
+               20150908140200    NaN   1062
+               20150908141000    NaN    145
+               20150908141500    418    NaN
+               20150908141800    NaN    450
+               20150908142900   1973   1499
+               20150908143000  19522  16659
+D              20150908143000    433     65
+E              20150908143000   7290   7375
+F              20150908143000      0      0
+G              20150908143000   1796    340
+```
+
+The standard approach is to find the index of the highest values of each group and index the dataframe for them.
+```python
+df.loc[df.reset_index().groupby(['F_Type'])['to_date'].idxmax()]
+```
+A much more concise solution is to sort the index and call `groupby.tail`.
+```python
+new_df = df.sort_index().groupby(level='F_Type').tail(1)
+```
+
+Note that in the example above, `F_Type` and `to_date` are indices. If they were columns, use `sort_values` instead and call `groupby.tail`:
+```python
+new_df = df.sort_values(['F_Type', 'to_date']).groupby('F_Type').tail(1)
+```
+
+[result](https://i.stack.imgur.com/fDbzI.png)
+
 
 ---
 
