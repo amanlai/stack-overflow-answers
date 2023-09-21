@@ -1,6 +1,9 @@
 ## How to change fontsize on matplotlib plots
 
-<sup>This post is based on my answer to a Stack Overflow question that may be found [here](https://stackoverflow.com/a/75633114/19123103).</sup>
+<sup>This post is based on my answer to a Stack Overflow question that may be found at 
+[1](https://stackoverflow.com/a/75633114/19123103),
+[2](https://stackoverflow.com/a/75633160/19123103).
+</sup>
 
 
 #### Change ylabel fontsize
@@ -15,3 +18,19 @@ You can also change the position of the ylabel by calling `set()` on `Text` obje
 ```python
 ax.yaxis.get_label().set(fontsize=40, position=[0.5,0.7])
 ```
+
+The same logic applies for x-axis labels as well.
+
+A working example is as follows.
+```python
+fig, ax = plt.subplots(figsize=(5,3))
+ax.plot(range(10), range(10))
+ax.set(xlabel='Time', ylabel='Value')
+ax.xaxis.label.set(fontsize=20, position=(0.9, 0))
+ax.yaxis.label.set(fontsize=15, position=(0, 0.9))
+```
+
+[![result][1]][1]
+
+
+  [1]: https://i.stack.imgur.com/YHf7o.png
