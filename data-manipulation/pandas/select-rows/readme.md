@@ -1,6 +1,13 @@
 ## Select rows from a DataFrame
 
-<sup>This post is based on my answers to Stack Overflow questions that may be found at [1](https://stackoverflow.com/a/73762002/19123103), [2](https://stackoverflow.com/a/72842272/19123103), [3](https://stackoverflow.com/a/72862831/19123103), [4](https://stackoverflow.com/a/72873572/19123103) and [5](https://stackoverflow.com/a/73074165/19123103), [5](https://stackoverflow.com/a/73673468/19123103). </sup>
+<sup>This post is based on my answers to Stack Overflow questions that may be found at 
+[1](https://stackoverflow.com/a/73762002/19123103), 
+[2](https://stackoverflow.com/a/72842272/19123103), 
+[3](https://stackoverflow.com/a/72862831/19123103), 
+[4](https://stackoverflow.com/a/72873572/19123103),
+[5](https://stackoverflow.com/a/73074165/19123103),
+[6](https://stackoverflow.com/a/73673468/19123103),
+[7](https://stackoverflow.com/a/75608621/19123103). </sup>
 
 ### 1. Use f-strings inside `query()` calls
 
@@ -233,6 +240,44 @@ This is especially useful if `BoolCol` is actually the result of multiple compar
 For example, if you want to get the row indexes where `NumCol` value is greater than 0.5, `BoolCol` value is True and the product of `NumCol` and `BoolCol` values is greater than 0, you can do so by evaluating an expression via `eval()` and call `pipe()` on the result to perform the indexing of the indexes.<sup>5</sup>
 ```python
 df.eval("NumCol > 0.5 and BoolCol and NumCol * BoolCol >0").pipe(lambda x: x.index[x])
+```
+
+#### Select rows from a dataframe with `datetime.date` index
+
+When you convert `df.index` into dtype `datetime64` using `pd.to_datetime`, the type of each index, in fact, becomes type `datetime.datetime`. You can verify:
+```python
+import datetime
+# sample data
+df = pd.DataFrame({'A': range(5)}, index=pd.date_range('2000-01-01','2000-01-05', 5).date) 
+
+df.index = pd.to_datetime(df.index)
+isinstance(df.index[0], datetime.datetime)       # True
+```
+Once you convert the index into `datetime64`, you can index rows using `loc[]`.
+```python
+df.loc['2000-01-03']
+# or for range of dates
+df.loc['2000-01-03':'2000-01-05']
+```
+Besides, null times don't render even if the dtype is `datetime64`, so visually, it's exactly the same.
+
+That said, if you want to use `datetime.date`, you can still do so by explicitly using `datetime.date`. For example, to select values on `2000-01-03`, you can use either `loc` or `query`:
+```python
+df = pd.DataFrame({'A': range(5)}, index=pd.date_range('2000-01-01','2000-01-05', 5).date) 
+
+df.loc[datetime.date(2000, 1, 3)]
+# or
+df.query("index == @datetime.date(2000, 1, 3)")
+```
+
+If you need to select a range of dates between dates, `query` is very convenient (or `between` works too):
+```python
+date1 = datetime.date(2000, 1, 3)
+date2 = datetime.date(2000, 1, 5)
+
+df.query("@date1 <= index <= @date2")
+# or
+df[df.index.to_series().between(date1, date2)]
 ```
 
 
