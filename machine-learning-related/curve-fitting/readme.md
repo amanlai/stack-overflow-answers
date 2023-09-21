@@ -1,6 +1,8 @@
 ## How to fit a curve to data using python
 
-<sup> It's a post that was first posted as an answer to a Stack Overflow question that can be found at [here](https://stackoverflow.com/a/75598551/19123103) and [here](https://stackoverflow.com/q/50371428/19123103). </sup>
+<sup> This post is based on my answers to Stack Overflow questions that can be found at 
+[1](https://stackoverflow.com/a/75598551/19123103),
+[2](https://stackoverflow.com/q/50371428/19123103). </sup>
 
 
 
