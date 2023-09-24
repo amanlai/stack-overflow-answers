@@ -1,28 +1,29 @@
 ## How to use `minimize` from `scipy` with constraints
 
-<sup> It's a post that was first posted as an answer to a Stack Overflow question that can be found [here](https://stackoverflow.com/a/75709136/19123103). </sup>
+<sup> This post is based on my answer to a Stack Overflow question that can be found [here](https://stackoverflow.com/a/75709136/19123103).</sup>
 
-> Let's suppose I have a matrix
-> ```python
-> arr = array([[0.8, 0.2],[-0.1, 0.14]])
-> ```
-> with a target function
-> ```python
-> def matr_t(t):
->     return array([[t[0], 0],[t[2]+complex(0,1)*t[3], t[1]]]
-> 
-> def target(t):
->     arr2 = matr_t(t)
->     ret = 0
->     for i, v1 in enumerate(arr):
->           for j, v2 in enumerate(v1):
->                ret += abs(arr[i][j]-arr2[i][j])**2
->     return ret
-> ```
-> now I want to minimize this target function under the assumption that the `t[i]` are real numbers, and something like `t[0]+t[1]=1`.
+Given a target function
+```python
+def matr_t(t):
+    return array([[t[0], 0],[t[2]+complex(0,1)*t[3], t[1]]]
 
+def target(t):
+    arr2 = matr_t(t)
+    ret = 0
+    for i, v1 in enumerate(arr):
+        for j, v2 in enumerate(v1):
+            ret += abs(arr[i][j]-arr2[i][j])**2
+    return ret
+```
+and an array
+```python
+arr = array([[0.8, 0.2],[-0.1, 0.14]])
+```
+How do we minimize the target function under the assumption that the `t[i]` are real numbers with a constraint that `t[0]+t[1]=1`?
 
-Instead of writing a custom constraint function, you can construct a `scipy.optimize.LinearConstraint` object and pass it as the constraint. Its construction asks for upper and lower bounds; also the vector of independent variables has to have the same length as the variable length passed to the objective function, so the constraint such as `t[0] + t[1] = 1` should be reformulated as the following (because `t` is length 4 as can be seen from its manipulation in `matr_t()`):
+---
+
+Instead of writing a custom constraint function, we can construct a `scipy.optimize.LinearConstraint` object and pass it as the constraint. Its construction asks for upper and lower bounds; also the vector of independent variables has to have the same length as the variable length passed to the objective function, so the constraint such as `t[0] + t[1] = 1` should be reformulated as the following (because `t` is length 4 as can be seen from its manipulation in `matr_t()`):
 
 [![constraint][0]][0]
 
