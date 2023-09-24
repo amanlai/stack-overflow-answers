@@ -7,7 +7,8 @@
 [4](https://stackoverflow.com/a/72873572/19123103),
 [5](https://stackoverflow.com/a/73074165/19123103),
 [6](https://stackoverflow.com/a/73673468/19123103),
-[7](https://stackoverflow.com/a/75608621/19123103). </sup>
+[7](https://stackoverflow.com/a/75608621/19123103),
+[8](https://stackoverflow.com/a/75702075/19123103). </sup>
 
 ### 1. Use f-strings inside `query()` calls
 
@@ -278,6 +279,24 @@ date2 = datetime.date(2000, 1, 5)
 df.query("@date1 <= index <= @date2")
 # or
 df[df.index.to_series().between(date1, date2)]
+```
+
+
+
+#### Selecting rows from a MultiIndex dataframe
+
+`slice(None)` can be used to select all the rows at that level. For example, given the following dataframe, 
+```python
+ix = pd.MultiIndex.from_product([('x', 'y'), ('xyz', 'wxy')], names=['family', 'type'])
+df = pd.DataFrame({'A': [1,2,3,4], 'B': [*'abcd']}, index=ix)
+```
+to select rows where `type=='xyz'` in `level=1`, we can use
+```python
+df.loc[(slice(None), 'xyz'), :]
+```
+On the other hand, to select rows in the first level, `loc[]` does the job. For example, the following selects rows where `family=='x'`
+```python
+df.loc[['x']]
 ```
 
 
