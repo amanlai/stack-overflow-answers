@@ -1,6 +1,9 @@
 ## What is the difference between `string` and `object` dtypes in Pandas?
 
-<sup> This is adapted from my answer to a Stack Overflow question that can be found at [1](https://stackoverflow.com/a/76055971/19123103) and [2](https://stackoverflow.com/a/75230706/19123103).</sup>
+<sup> This is adapted from my answer to a Stack Overflow question that can be found at 
+[1](https://stackoverflow.com/a/76055971/19123103),
+[2](https://stackoverflow.com/a/75230706/19123103), 
+[3](https://stackoverflow.com/a/75729269/19123103).</sup>
 
 Since pandas 1.0, there's a new `'string'` dtype where you can keep a Nullable integer dtype after casting a column into a `'string'` dtype. For example, if you want to convert floats to strings without decimals, yet the column contains NaN values that you want to keep as null, you can use `'string'` dtype.
 ```python
