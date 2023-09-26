@@ -3,7 +3,8 @@
 <sup> This repo is based on my answers to Stack Overflow questions that can be found at 
 [1](https://stackoverflow.com/a/75901708/19123103),
 [2](https://stackoverflow.com/a/75974729/19123103),
-[3](https://stackoverflow.com/a/75319130/19123103). </sup>
+[3](https://stackoverflow.com/a/75319130/19123103),
+[4](https://stackoverflow.com/a/75753389/19123103). </sup>
 
 
 
@@ -76,6 +77,21 @@ df3 = df.xs(pd.MultiIndex.from_tuples([('A', 'col1'), ('B', 'col2')]), axis=1)
 ```
 [![res2][3]][3]
 
+
+#### 6. `get()`
+
+You can also use `get()` to create a new copy (that doesn't run into `SettingWithCopyWarning`).
+```python
+new = old.get(['A', 'C', 'D'])
+```
+
+#### 7. `assign()`
+
+If `new` is an already existing dataframe, then `assign()` also works (if you want to keep the old columns with their original column names).
+```python
+new = pd.DataFrame()
+new = new.assign(**old[['A', 'C', 'D']])
+```
 
 
 
