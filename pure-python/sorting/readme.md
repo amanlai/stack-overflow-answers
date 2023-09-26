@@ -1,6 +1,8 @@
 ## How to sort a list
 
-<sup>This post is based on my answer to a Stack Overflow question that may be found [here](https://stackoverflow.com/a/75326812/19123103).</sup>
+<sup>This post is based on my answer to a Stack Overflow question that may be found at 
+[1](https://stackoverflow.com/a/75326812/19123103),
+[2](https://stackoverflow.com/a/75760120/19123103).</sup>
 
 ### How to sort a list of datetime objects
 
@@ -36,4 +38,30 @@ If your list is a **mixture of date and datetimes**, you can normalize them all 
 lst = [datetime(2013, 1, 21, 6, 14, 47), date(2013, 1, 22), date(2013, 1, 21)]
 new_lst = sorted(lst, key=lambda x: x if isinstance(x, datetime) else datetime(x.year, x.month, x.day))
 # [datetime.date(2013, 1, 21), datetime.datetime(2013, 1, 21, 6, 14, 47), datetime.date(2013, 1, 22)]
+```
+
+
+### Sort in descending order
+
+Especially if the data is numeric, negation can be used to sort in descending order. This is especially useful if you need to pass a sorting key anyway. For example, if the data was as follows:
+```python
+data = ['9', '10', '3', '4.5']
+sorted(data, reverse=True)                      # doesn't sort correctly
+sorted(data, key=lambda x: -float(x))           # sorts correctly
+#                          ^ negate here
+```
+That said, passing a key along with `reverse=True` also works.
+```
+sorted(data, key=float, reverse=True)           # ['10', '9', '4.5', '3']
+```
+
+
+For an example with datetime, that would look like as follows: 
+```python
+from datetime import datetime
+ts = ["04/20/2010 10:07:30", "12/01/2009 10:07:52", "01/13/2020 10:08:22", "12/01/2009 12:07:52"]
+ts.sort(key=lambda x: -datetime.strptime(x, '%m/%d/%Y %H:%M:%S').timestamp())
+#                                                               ^^^^ convert to a number here
+ts
+# ['01/13/2020 10:08:22', '04/20/2010 10:07:30', '12/01/2009 12:07:52', '12/01/2009 10:07:52']
 ```
