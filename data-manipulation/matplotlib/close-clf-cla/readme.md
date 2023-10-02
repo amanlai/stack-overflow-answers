@@ -55,3 +55,7 @@ cla_wrong:
 current memory usage is 29,174 KB; peak was 29,650 KB.
 ======================================================
 ```
+
+Code used to the produce the above result may be found on the current repo [here](./memory_profiler.py).
+
+To produce the result above, nagivate to the folder containing the function and run `python memory_profiler.py` on the command line.
