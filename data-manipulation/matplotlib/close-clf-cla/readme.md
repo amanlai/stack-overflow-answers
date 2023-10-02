@@ -31,3 +31,27 @@ As [David Zwicker](https://stackoverflow.com/a/8228808/19123103) explained, all 
   ```
 
 
+### Memory usage
+
+[Heberto Mayorquin](https://stackoverflow.com/a/33343289/19123103) points out that `plt.close()` saves memory. However, as the following memory allocation traces show, if a lot of similar images need to be created in a loop, clearing with `clf()` or `cla()` is actually _more_ memory efficient than closing a window and creating a new figure instance with `plt.close()`.
+
+However, there's a caveat that since `cla()`/`clf()` are meant to re-use a previously defined Axes/Figure, it's important to define the Figure object to be re-used outside the loop (that creates image files). I also included "wrong" ways to use `cla()` and `clf()` in the test (where a new Figure instance is created every time a new figure is drawn) which are indeed more costly than creating a new Figure and closing it in a loop.
+
+
+```shell
+close:
+current memory usage is 12,456 KB; peak was 13,402 KB.
+======================================================
+cla:
+current memory usage is 899 KB; peak was 1,451 KB.
+======================================================
+clf:
+current memory usage is 3,806 KB; peak was 8,061 KB.
+======================================================
+clf_wrong:
+current memory usage is 7,392 KB; peak was 10,494 KB.
+======================================================
+cla_wrong:
+current memory usage is 29,174 KB; peak was 29,650 KB.
+======================================================
+```
