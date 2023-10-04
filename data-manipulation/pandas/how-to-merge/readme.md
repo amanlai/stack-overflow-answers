@@ -1,6 +1,9 @@
 ## How to merge two dataframes
 
-<sup>This post is based on my answer to a Stack Overflow question that may be found [here](https://stackoverflow.com/a/75190030/19123103).</sup>
+<sup>This post is based on my answer to a Stack Overflow question that may be found at 
+[1](https://stackoverflow.com/a/75190030/19123103),
+[2](https://stackoverflow.com/a/75772534/19123103).
+</sup>
 
 To merge two dataframes on columns with common keys, simply pass the relevant column(s) from each dataframe as follows:
 ```python
@@ -50,6 +53,49 @@ merged_df = df1.merge(df2, on=['common_column_1', 'common_column_2'])
    df1.join([df2, df3], how='inner').reset_index()
    ```
    [![res4][4]][4]
+
+
+---
+
+### How to merge a list of dataframes
+
+`pd.DataFrame.merge()` can be called inside `reduce` as well.
+```python
+from functools import reduce
+df = reduce(lambda x, y: x.merge(y, on='Date'), dfList)
+```
+The equivalent explicit loop is readable:
+```python
+df = dfList[0]
+for d in dfList[1:]:
+    df = df.merge(d, on='Date')
+```
+`pd.concat` and `join` can be used for this task as well. Just need to make the merge key the index of each dataframe.
+```python
+df = pd.concat([d.set_index('Date') for d in dfList], axis=1, join='inner').reset_index()
+
+# or
+df = pd.DataFrame().join([d.set_index('Date') for d in dfList], how='outer').dropna().reset_index()
+
+# or 
+dfList = [d.set_index('Date') for d in dfList]
+df = dfList[0].join(dfList[1:], how='inner').reset_index()
+```
+
+For the toy example,
+```python
+df1 = pd.DataFrame({'Date': [1,2,3,4], 'Value1': [2,3,3,4]})
+df2 = pd.DataFrame({'Date': [1,4,2], 'Value2': [2,3,3]})
+df3 = pd.DataFrame({'Date': [3,2,4,1,6], 'Value3': [1,2,3,3,4]})
+dfList = [df1, df2, df3]
+```
+all of the options above produce:
+```none
+   Date  Value1  Value2  Value3
+0     1       2       2       3
+1     2       3       3       2
+2     4       4       3       3
+```
 
 
   [1]: https://i.stack.imgur.com/RBTQy.png
