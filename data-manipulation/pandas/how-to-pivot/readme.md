@@ -1,6 +1,11 @@
 ## How can I pivot a dataframe?
 
-<sup>This post is based on my answers to Stack Overflow questions that may be found at [1](https://stackoverflow.com/a/73060100/19123103), [2](https://stackoverflow.com/a/73330534/19123103), [3](https://stackoverflow.com/a/73341979/19123103).</sup>
+<sup>This post is based on my answers to Stack Overflow questions that may be found at 
+[1](https://stackoverflow.com/a/73060100/19123103),
+[2](https://stackoverflow.com/a/73330534/19123103),
+[3](https://stackoverflow.com/a/73341979/19123103),
+[4](https://stackoverflow.com/a/75772762/19123103).
+</sup>
 
 The canonical method to reshape a dataframe by pivoting it is `pivot()`.
 ```python
