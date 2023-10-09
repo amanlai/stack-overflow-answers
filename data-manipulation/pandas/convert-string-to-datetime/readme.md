@@ -5,7 +5,8 @@
 [2](https://stackoverflow.com/a/75253473/19123103),
 [3](https://stackoverflow.com/q/56614558/19123103), 
 [4](https://stackoverflow.com/a/75272623/19123103),
-[5](https://stackoverflow.com/a/75774905/19123103).
+[5](https://stackoverflow.com/a/75774905/19123103),
+[6](https://stackoverflow.com/a/75780200/19123103).
 </sup>
 
 #### `pd.to_datetime()`
