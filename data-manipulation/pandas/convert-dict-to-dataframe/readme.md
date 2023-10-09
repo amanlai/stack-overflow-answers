@@ -15,11 +15,6 @@ mydict = {
 ```
 The question is, how do you set `Date` as the index upon dataframe construction.
 
-The simplest answer is to simply call `set_index()`:
-```python
-df = pd.DataFrame(dictionary, columns=['Date', 'Open', 'Close']).set_index('Date')
-```
-
 If the original dictionary is not needed, then an alternative is to simply pop the `Date` key.
 ```python
 df = pd.DataFrame(mydict, index=pd.Series(mydict.pop('Date'), name='Date'))
