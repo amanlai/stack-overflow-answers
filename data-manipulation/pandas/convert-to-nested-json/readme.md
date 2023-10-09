@@ -125,6 +125,8 @@ Both produce the following output for the given input:
 
 ---
 
-<sup>1</sup> Benchmark result: On a frame with 100k rows, the loop approach is approx. 50 times faster than the `groupby.apply` approach if each group is relatively small. The code used to produce the benchmark result may be found on this repo [here](./benchmark.py)
+<sup>1</sup> Benchmark result: On a frame with 100k rows, the loop approach is approx. 50 times faster than the `groupby.apply` approach if each group is relatively small. If the groups are large, then the difference is much smaller but the loop implementation is still faster than `groupby.apply`. 
+
+The code used to produce the benchmark result may be found on this repo [here](./benchmark.py)
 
   [1]: https://stackoverflow.com/a/40490276/19123103
