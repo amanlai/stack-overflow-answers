@@ -14,4 +14,4 @@
 > 
 > If there is no solution, return False. For example if N=5, then numbers 1,2,3,4,5 cannot be put into square sums row: 1+3=4, 4+5=9, but 2 has no pairs and cannot link `[1,3]` and `[4,5]`.
 
-In this solution, a graph is created and iteratively checked to see if the condition passes. 
+In this solution, a graph is created and iteratively checked to see if the condition passes.
