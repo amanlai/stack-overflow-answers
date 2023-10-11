@@ -1,35 +1,27 @@
 ## How to determine the length of lists in a pandas dataframe column
 
-<sup>It's a post that was first posted as an answer to the following Stack Overflow question and can be found [here](https://stackoverflow.com/a/75796628/19123103). </sup>
+<sup>This post is based on my answer to a Stack Overflow question that may be found [here](https://stackoverflow.com/a/75796628/19123103). </sup>
 
-> I have a dataframe like this:
-> 
-> ```none
->                                                     CreationDate
-> 2013-12-22 15:25:02                  [ubuntu, mac-osx, syslinux]
-> 2009-12-14 14:29:32  [ubuntu, mod-rewrite, laconica, apache-2.2]
-> 2013-12-22 15:42:00               [ubuntu, nat, squid, mikrotik]
-> ```
-> I am calculating the length of lists in the `CreationDate` column and making a new `Length` column like this:
-> ```python
-> df['Length'] = df.CreationDate.apply(lambda x: len(x))
-> ```
->     
-> Which gives me this:
-> ```none
->                                                     CreationDate  Length
-> 2013-12-22 15:25:02                  [ubuntu, mac-osx, syslinux]       3
-> 2009-12-14 14:29:32  [ubuntu, mod-rewrite, laconica, apache-2.2]       4
-> 2013-12-22 15:42:00               [ubuntu, nat, squid, mikrotik]       4
-> ```
->     
-> Is there a more pythonic way to do this?
+If a dataframe column contains lists such as the following:
+
+```none
+                                        col
+                [ubuntu, mac-osx, syslinux]
+[ubuntu, mod-rewrite, laconica, apache-2.2]
+             [ubuntu, nat, squid, mikrotik]
+```
+How do you compute the length of each of the lists to get the following output:
+```none
+                                        col  Length
+                [ubuntu, mac-osx, syslinux]       3
+[ubuntu, mod-rewrite, laconica, apache-2.2]       4
+             [ubuntu, nat, squid, mikrotik]       4
+```
+
+Weirdly, `.str` accessor can also work on lists, so the canonical way is to call `str.len()`. However, as is often the case with pandas columns of object dtype, there are _better_ ways to perform the same task by dropping down to a Python level loop.
 
 
-
-
-
-##### Convert to list and `map` a function
+#### Convert to list and `map` a function
 
 Pandas dataframe columns are not meant to store collections such as lists, tuples etc. because virtually none of the optimized methods work on these columns, so when a dataframe contains such items, it's usually more efficient to convert the column into a Python list and manipulate the list.
 
