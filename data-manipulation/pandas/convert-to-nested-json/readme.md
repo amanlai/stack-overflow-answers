@@ -2,7 +2,8 @@
 
 <sup>This post is based on my answer to a Stack Overflow question that may be found at 
 [1](https://stackoverflow.com/a/75780569/19123103),
-[2](https://stackoverflow.com/a/75815579/19123103).</sup>
+[2](https://stackoverflow.com/a/75815579/19123103),
+[3](https://stackoverflow.com/a/75816928/19123103).</sup>
 
 #### DataFrame to flat json
 
@@ -15,7 +16,12 @@ Setup:
 ```
 How do we convert it into a Python dictionary which then later be stored as a json string?
 
-Simply calling `dict()` function does the job.
+`dict(zip())` is extremely useful in this case. For example:
+```python
+mydict = dict(zip(df['id'], df.set_index('id').values.tolist()))
+```
+
+In the specific example above, simply calling `dict()` function does the job.
 ```python
 mydict = dict(df.values)                        # {0.0: 10.2, 1.0: 5.7, 2.0: 7.4}
 # or for faster code, convert to a list
@@ -30,6 +36,10 @@ If the index is meant to be the keys, it's even simpler.
 ```python
 mydict = df['value'].to_dict()                  # {0: 10.2, 1: 5.7, 2: 7.4}
 ```
+
+As it happens, dropping down to Python level is much faster than doing the same using pandas methods. When we compare the performances of pandas vs Python dict syntax, the difference is quite stark. The code used to produce the benchmark result may be found on this repo [here](./benchmark2.py).
+
+[![perfplot][2]][2]
 
 
 #### DataFrame to nested json
@@ -159,6 +169,10 @@ Both produce the following output for the given input:
 
 <sup>1</sup> Benchmark result: On a frame with 100k rows, the loop approach is approx. 50 times faster than the `groupby.apply` approach if each group is relatively small. If the groups are large, then the difference is much smaller but the loop implementation is still faster than `groupby.apply`. 
 
-The code used to produce the benchmark result may be found on this repo [here](./benchmark.py)
+The code used to produce the benchmark result may be found on this repo [here](./benchmark.py).
+
+
+
 
   [1]: https://stackoverflow.com/a/40490276/19123103
+  [2]: https://i.stack.imgur.com/V7aiB.png
