@@ -4,7 +4,8 @@
 [1](https://stackoverflow.com/a/73060100/19123103),
 [2](https://stackoverflow.com/a/73330534/19123103),
 [3](https://stackoverflow.com/a/73341979/19123103),
-[4](https://stackoverflow.com/a/75772762/19123103).
+[4](https://stackoverflow.com/a/75772762/19123103),
+[5](https://stackoverflow.com/a/75838647/19123103).
 </sup>
 
 The canonical method to reshape a dataframe by pivoting it is `pivot()`.
@@ -222,6 +223,22 @@ table = (
 Note that for the particular example in the OP, as `pivot_table` method's `columns` parameter is not used, `pivot_table` is equivalent to `groupby` [as explained here](https://stackoverflow.com/questions/34702815/pandas-group-by-and-pivot-table-difference/72933069#72933069). So an equivalent (and possibly faster) approach to produce the initial pivot table result is
 ```python
 table = df.groupby(['A','B']).sum()
+```
+
+
+#### Pivot table of counts
+
+For the specific case of counts table, `value_counts()` can be called on a dataframe. So another way is to count each pairs of Col X-Col Y values and unstack the counts. In other words, to perform the following transformation:
+```none
+  Col X    Col Y                   cat 1  cat 2  cat 3
+class 1    cat 1          class 1      1      0      0
+class 2    cat 1    --->  class 2      1      0      1
+class 3    cat 2          class 3      0      1      0
+class 2    cat 3
+```
+we can use the following code:
+```python
+table = df[['Col X', 'Col Y']].value_counts().rename_axis([None, None]).unstack(fill_value=0)
 ```
 
 

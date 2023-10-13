@@ -1,6 +1,6 @@
 ## How to plot time series in python
 
-<sup> This post first appeared as an answer to a Stack Overflow question that can be found [here](https://stackoverflow.com/q/19079143/19123103) </sup>
+<sup> This post is based on my answer to a Stack Overflow question that can be found [here](https://stackoverflow.com/q/19079143/19123103) </sup>
 
 #### 1. Make sure the data is `datetime` (or `datetime64`)
 

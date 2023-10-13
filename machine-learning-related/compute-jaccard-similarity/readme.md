@@ -1,8 +1,6 @@
 ## How to compute jaccard similarity from a pandas dataframe
 
-<sup>It's a post that was first posted as an answer to a Stack Overflow question that can be found [here](https://stackoverflow.com/a/75830840/19123103). </sup>
-
-
+<sup>This post is based on my answer to a Stack Overflow question that can be found [here](https://stackoverflow.com/a/75830840/19123103). </sup>
 
 
 Jaccard similarity scores can also be calculated using [`scipy.spatial.distance.pdist`][1]. One of its metrics is `'jaccard'` which computes jaccard dissimilarity (so that the score has to be subtracted from 1 to get jaccard similarity). It returns a 1D array where each value corresponds to the jaccard similarity between two columns. 
