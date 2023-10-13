@@ -1,6 +1,38 @@
-## How to convert a dataframe into a nested json
+## How to convert a dataframe to json
 
-<sup>This post is based on my answer to a Stack Overflow question that may be found [here](https://stackoverflow.com/a/75780569/19123103).</sup>
+<sup>This post is based on my answer to a Stack Overflow question that may be found at 
+[1](https://stackoverflow.com/a/75780569/19123103),
+[2](https://stackoverflow.com/a/75815579/19123103).</sup>
+
+#### DataFrame to flat json
+
+Setup:
+```none
+    id    value
+0    0     10.2
+1    1      5.7
+2    2      7.4
+```
+How do we convert it into a Python dictionary which then later be stored as a json string?
+
+Simply calling `dict()` function does the job.
+```python
+mydict = dict(df.values)                        # {0.0: 10.2, 1.0: 5.7, 2.0: 7.4}
+# or for faster code, convert to a list
+mydict = dict(df.values.tolist())               # {0.0: 10.2, 1.0: 5.7, 2.0: 7.4}
+```
+If one column is `int` and the other is `float` as above, then cast to `object` dtype and call `dict()`.
+```python
+mydict = dict(df.astype('O').values)            # {0: 10.2, 1: 5.7, 2: 7.4}
+mydict = dict(df.astype('O').values.tolist())   # {0: 10.2, 1: 5.7, 2: 7.4}
+```
+If the index is meant to be the keys, it's even simpler.
+```python
+mydict = df['value'].to_dict()                  # {0: 10.2, 1: 5.7, 2: 7.4}
+```
+
+
+#### DataFrame to nested json
 
 Setup:
 
