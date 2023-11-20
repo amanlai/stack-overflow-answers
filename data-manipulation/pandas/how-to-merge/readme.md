@@ -2,7 +2,8 @@
 
 <sup>This post is based on my answer to a Stack Overflow question that may be found at 
 [1](https://stackoverflow.com/a/75190030/19123103),
-[2](https://stackoverflow.com/a/75772534/19123103).
+[2](https://stackoverflow.com/a/75772534/19123103),
+[3](https://stackoverflow.com/a/75854248/19123103).
 </sup>
 
 To merge two dataframes on columns with common keys, simply pass the relevant column(s) from each dataframe as follows:
@@ -96,6 +97,24 @@ all of the options above produce:
 1     2       3       3       2
 2     4       4       3       3
 ```
+
+#### Why is there a column with `_x` appended to the name when I merge?
+
+A merged dataframe shouldn't have overlapping column names, so if the merged dataframe has `B_x` when it should have `B`, then it means both dataframes had column `B` and pandas made the executive decision to add suffixes `_x` to the `B` column of the left dataframe and `_y` to the `B` column of the right dataframe.
+
+In fact, you can change what these suffixes should be by passing a tuple to `suffixes=` parameter of `merge()`. For example,
+```python
+merged_df = df1.merge(df2, on='A', suffixes=('_left', '_right'))
+```
+Now, `merged_df` will have `B_left` instead of `B_x`. If you pass empty strings:
+```python
+df1.merge(df2, on='A', suffixes=('', ''))
+```
+you'll get a ValueError similar to the following
+```none
+ValueError: columns overlap but no suffix specified: Index(['B'], dtype='object')
+```
+which says that overlapping columns were identified.
 
 
   [1]: https://i.stack.imgur.com/RBTQy.png
