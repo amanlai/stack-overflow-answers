@@ -1,6 +1,11 @@
-## Drop duplicate rows across multiple columns
+## Drop duplicate rows
 
-<sup>This post is based on my answer to a Stack Overflow question that may be found [here](https://stackoverflow.com/a/75250654/19123103).</sup> 
+<sup>This post is based on my answer to a Stack Overflow question that may be found at 
+[1](https://stackoverflow.com/a/75250654/19123103),
+[2](https://stackoverflow.com/a/75901274/19123103).
+</sup> 
+
+### Drop duplicates across multiple rows
 
 Given a dataframe such as the following:
 
@@ -57,6 +62,56 @@ df.drop_duplicates(subset=df.columns, keep=False)
 df.drop_duplicates(subset=df.columns[[0, 2]], keep=False)
 ```
 
+
+### Drop duplicates in groups
+
+#### 1. `groupby.head(1)`
+
+The relevant `groupby` method to drop duplicates in each group is `groupby.head(1)`. Note that it is important to pass `1` to select the first row of each date-cid pair.
+```python
+df1 = df.groupby(['date', 'cid']).head(1)
+```
+
+#### 2. `duplicated()` is more flexible
+
+Another method is to use `duplicated()` to create a boolean mask and filter.
+```python
+df3 = df[~df.duplicated(['date', 'cid'])]
+```
+An advantage of this method over `drop_duplicates()` is that is can be chained with other boolean masks to filter the dataframe more flexibly. For example, to select the unique cids in Nevada for each date, use:
+```python
+df_nv = df[df['state'].eq('NV') & ~df.duplicated(['date', 'cid'])]
+```
+
+#### 3. `groupby.sample(1)`
+
+Another method to select a unique row from each group to use `groupby.sample()`. Unlike the previous methods mentioned, it selects a row from each group randomly (whereas the others only keep the first row from each group).
+```python
+df4 = df.groupby(['date', 'cid']).sample(n=1)
+```
+
+---
+
+You can verify that `df1`, `df2` (ayhan's output) and `df3` all produce the very same output and `df4` produces an output where `size` and `nunique` of cid match for each date (as required in the OP). In short, the following returns True.
+```python
+w, x, y, z = [d.groupby('date')['cid'].agg(['size', 'nunique']) for d in (df1, df2, df3, df4)]
+w.equals(x) and w.equals(y) and w.equals(z)   # True
+```
+and `w`, `x`, `y`, `z` all look like the following:
+```none
+       size  nunique
+date        
+2005      7        3
+2006    237       10
+2007   3610      227
+2008   1318       52
+2009   2664      142
+2010    997       57
+2011   6390      219
+2012   2904       99
+2013   7875      238
+2014   3979      146
+```
 
   [1]: https://i.stack.imgur.com/6W4wk.png
   [2]: https://i.stack.imgur.com/NsqJl.png
