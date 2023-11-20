@@ -1,20 +1,6 @@
 ## Count the frequency that a value occurs in a dataframe column
 
-<sup> This is a post that first appeared as an answer to [this Stack Overflow question](https://stackoverflow.com/q/22391433/19123103). </sup>
-
-> I have a dataset
-> ```none
-> category
-> cat a
-> cat b
-> cat a
-> ```
-> I'd like to return something like the following which shows the unique values and their frequencies
-> ```none
-> category   freq 
-> cat a       2
-> cat b       1
-> ```
+<sup> This is a post that first appeared as an answer to a Stack Overflow question that may be found at [1](https://stackoverflow.com/a/76002061/19123103). </sup>
 
 
 
