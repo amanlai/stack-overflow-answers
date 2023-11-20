@@ -8,7 +8,8 @@
 [5](https://stackoverflow.com/a/73074165/19123103),
 [6](https://stackoverflow.com/a/73673468/19123103),
 [7](https://stackoverflow.com/a/75608621/19123103),
-[8](https://stackoverflow.com/a/75702075/19123103). </sup>
+[8](https://stackoverflow.com/a/75702075/19123103)
+[9](https://stackoverflow.com/a/75902600/19123103). </sup>
 
 ### 1. Use f-strings inside `query()` calls
 
