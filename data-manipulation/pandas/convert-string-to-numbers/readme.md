@@ -1,20 +1,21 @@
 ## Convert strings to numbers in pandas
 
-<sup> It's a post that was first posted as an answer to the following Stack Overflow question, which may be found at [1](https://stackoverflow.com/a/75505969/19123103) and [2](https://stackoverflow.com/a/73625937/19123103). </sup>
+<sup> This post is based on my answers to Stack Overflow questions which may be found at 
+[1](https://stackoverflow.com/a/75505969/19123103),
+[2](https://stackoverflow.com/a/73625937/19123103),
+[3](https://stackoverflow.com/a/75974968/19123103).
+</sup>
 
-> I created a DataFrame from a list of lists:
+> Given a dataframe that looks like the following:
 > ```python
 > table = [
->     ['a',  '1.2',  '4.2' ],
->     ['b',  '70',   '0.03'],
->     ['x',  '5',    '0'   ],
+>     ['1.2',  '4.2' ],
+>     ['70',   '0.03'],
+>     ['5',    '0'   ],
 > ]
-> 
 > df = pd.DataFrame(table)
 > ```
-> How do I convert the columns to specific types? In this case, I want to convert columns 2 and 3 into floats.
-> 
-> Is there a way to specify the types while converting the list to DataFrame? Or is it better to create the DataFrame first and then loop through the columns to change the dtype for each column? Ideally I would like to do this in a dynamic way because there can be hundreds of columns, and I don't want to specify exactly which columns are of which type. All I can guarantee is that each column contains values of the same type.
+> How do I convert the columns to specific types?
 
 
 ##### 0. `astype` or `pd.to_numeric` work
