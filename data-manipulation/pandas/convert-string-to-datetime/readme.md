@@ -8,7 +8,8 @@
 [5](https://stackoverflow.com/a/75774905/19123103),
 [6](https://stackoverflow.com/a/75780200/19123103),
 [7](https://stackoverflow.com/a/75838545/19123103),
-[8](https://stackoverflow.com/a/75990548/19123103).
+[8](https://stackoverflow.com/a/75990548/19123103),
+[9](https://stackoverflow.com/a/77124871/19123103).
 </sup>
 
 #### `pd.to_datetime()`
@@ -98,6 +99,16 @@ df['Date'] = df['Date'].fillna(pd.to_datetime(df['Date'], format='%d/%m/%Y', err
 This method (of performing or more conversions) can be used to convert any column with "weirdly" formatted datetimes.
 
 
+#### `numpy`
+
+If you were already using `numpy`, `numpy.datetime64` could be used to get today's date as well. Then simply cast it into a string (or use `np.datetime_as_string`) to get its string representation in ISO 8601 format.
+```python
+import numpy as np
+
+np.datetime64('today')                         # numpy.datetime64('2023-09-17')
+np.datetime_as_string(np.datetime64('today'))  # '2023-09-17'
+str(np.datetime64('today'))                    # '2023-09-17'
+```
 
   [1]: https://i.stack.imgur.com/Qx5cy.png
   [2]: https://stackoverflow.com/q/56614558/7758804
