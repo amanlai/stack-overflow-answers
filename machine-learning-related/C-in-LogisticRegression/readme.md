@@ -1,5 +1,7 @@
 ## What is the inverse of regularization strength in Logistic Regression?
 
+<sup>This post is based on my answer to a Stack Overflow question that may be found [here](https://stackoverflow.com/a/76511148/19123103).</sup>
+
 In one sentence, _regularization_ makes the model perform worse on training data so that it may perform better on holdout data. 
 
 Logistic regression is an optimization problem where the following objective function is minimized.
