@@ -49,3 +49,13 @@ def square_sums(n):
                 G[k].add(v)
                 G[v].add(k)
     return dfs(G)
+
+
+
+# driver
+n = 37
+x = square_sums(n)
+print(x)
+if x:
+    print(all((i+j)**0.5 % 1 == 0 for i,j in zip(x, x[1:])))  # True
+    print(sorted(x) == list(range(1, n+1)))                   # True
